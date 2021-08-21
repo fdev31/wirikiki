@@ -1,5 +1,5 @@
 $primary-color: #ffcb00;
-$shadow-color: #333;
+$shadow-color: #100;
 
 @mixin shadowed($color: $shadow-color) {
   box-shadow: 0px 1px 11px $color;
@@ -90,7 +90,7 @@ h1.toptitle {
   color: #ebbb71 !important;
 }
 pre {
-  background: #aaa;
+  background: #e4e4e4;
   color: #111;
   padding: 1ex;
   border-radius: 1ex;
