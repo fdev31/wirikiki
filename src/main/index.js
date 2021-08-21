@@ -39,6 +39,11 @@ const keyHandlers = {
       vue.toggleEditor();
     }
   },
+  n() {
+    if (!vue.editorMode) {
+      vue.newPage();
+    }
+  },
   Delete() {
     if (!vue.editorMode) {
       vue.deletePage();
