@@ -28,6 +28,8 @@ USE_GIT = os.path.exists(os.path.join(PATH, ".git"))
 
 
 async def _gitCmd(*args):
+    if not USE_GIT:
+        return
     cmd_args = ["git", f"--git-dir={PATH}.git", f"--work-tree={PATH}"]
     cmd_args.extend(args)
     proc = await asyncio.create_subprocess_exec(*cmd_args)
