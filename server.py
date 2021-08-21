@@ -4,6 +4,7 @@ import os
 from pydantic import BaseModel
 from typing import List
 
+import asyncio
 import aiofiles
 
 from fastapi import FastAPI
@@ -18,7 +19,31 @@ except ImportError:
 else:
     app = FastAPI(debug=True, default_response_class=ORJSONResponse)
 
-PATH = os.environ.get("DBDIR", "./myKB/")  # WITH trailing slash
+PATH = os.environ.get("DBDIR", "./myKB/")
+
+if not PATH.endswith(os.path.sep):
+    PATH += os.path.sep
+
+USE_GIT = os.path.exists(os.path.join(PATH, ".git"))
+
+
+async def _gitCmd(*args):
+    cmd_args = ["git", f"--git-dir={PATH}.git", f"--work-tree={PATH}"]
+    cmd_args.extend(args)
+    proc = await asyncio.create_subprocess_exec(*cmd_args)
+    await proc.communicate()
+
+
+async def gitSave(path, message="backup"):
+    await _gitCmd("commit", path + ".md", "-m", message)
+
+
+async def gitAdd(path):
+    await _gitCmd("add", path + ".md")
+
+
+async def gitRemove(path):
+    await _gitCmd("rm", "-f", path + ".md")
 
 
 class Note(BaseModel):
@@ -43,8 +68,15 @@ class Note(BaseModel):
         return n
 
     async def save(self):
+        wasExisting = self.exists
         async with aiofiles.open(self.filename, "w", encoding="utf-8") as f:
             await f.write(self.content)
+        if not wasExisting:
+            await gitAdd(self.name)
+        await gitSave(
+            self.name,
+            f"Udated {self.name}" if wasExisting else f"NEW note: {self.name}",
+        )
 
 
 @app.get("/")
@@ -53,10 +85,10 @@ def index():
 
 
 @app.delete("/notebook")
-def deleteNote(name: str):
+async def deleteNote(name: str):
     """Remove one note"""
-    fname = os.path.join(PATH, name) + ".md"
-    os.unlink(fname)
+    await gitRemove(name)
+    await gitSave(name, f"Removed {name}")
 
 
 @app.post("/notebook")
@@ -87,3 +119,14 @@ async def getNotes() -> List[Note]:
 
 
 app.mount("/", StaticFiles(directory="apps"), name="static")
+
+if USE_GIT:
+    fullpath = os.path.abspath(os.path.expanduser(os.path.expandvars(PATH)))
+    cwd = os.getcwd()
+    os.chdir(PATH)
+    for root, _dirs, files in os.walk(fullpath):
+        for fname in files:
+            if fname.endswith(".md"):
+                os.system(f'git add "{fname}"')
+    os.system('git commit -m "Wiki startup"')
+    os.chdir(cwd)
