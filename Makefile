@@ -26,7 +26,7 @@ venv:
 	python -m venv venv
 	./venv/bin/pip install -r require.txt
 
-dist:
+dist: vueapps
 	make clean
 	DIST=1 make jsfiles
 	rm -fr apps/*.map
