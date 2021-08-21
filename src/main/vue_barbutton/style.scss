@@ -1,3 +1,5 @@
+@use 'variables' as vars;
+
 @import url("https://fonts.googleapis.com/css?family=Montserrat:600&display=swap");
 
 $width: 100px;
@@ -38,7 +40,7 @@ span.btn a:before {
   transform: rotateY(0deg) translateZ($offset);
 }
 span.btn a:after {
-  color: #000;
+  color: vars.$primary-color;
   transform: rotateX(90deg) translateZ($offset);
 }
 span.btn a:hover {

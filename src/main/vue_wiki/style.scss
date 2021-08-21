@@ -1,4 +1,5 @@
-$primary-color: #ffcb00;
+@use 'variables' as vars;
+
 $shadow-color: #100;
 
 @mixin shadowed($color: $shadow-color) {
@@ -29,7 +30,7 @@ body.dark {
 }
 #topbar > h1,
 h1.toptitle {
-  color: #ffcb00;
+  color: vars.$primary-color;
   margin: 0;
   padding: 0 0 0 15px;
 }
@@ -120,7 +121,7 @@ textarea {
   @include animateSlow(0.35s);
   font-weight: bold;
   transform: scale(1.02);
-  background-color: $primary-color;
+  background-color: vars.$primary-color;
   margin-left: 1%;
   border-radius: 5px;
   color: #333;
