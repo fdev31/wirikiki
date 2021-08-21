@@ -1,0 +1,46 @@
+@import url("https://fonts.googleapis.com/css?family=Montserrat:600&display=swap");
+
+$width: 100px;
+$height: 40px;
+$offset: 20px;
+
+span.btn {
+  position: relative;
+  display: inline-flex;
+  width: $width;
+  height: $height;
+  margin: 5px 15px 0 0;
+  perspective: 1000px;
+}
+span.btn a {
+  font-size: 19px;
+  letter-spacing: 1px;
+  transform-style: preserve-3d;
+  transform: translateZ(-$offset);
+  transition: transform 0.25s;
+}
+span.btn a:before,
+span.btn a:after {
+  position: absolute;
+  content: attr(data-caption);
+  height: $height;
+  width: $width;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 5px solid black;
+  box-sizing: border-box;
+  border-radius: 5px;
+}
+span.btn a:before {
+  color: #fff;
+  background: #000;
+  transform: rotateY(0deg) translateZ($offset);
+}
+span.btn a:after {
+  color: #000;
+  transform: rotateX(90deg) translateZ($offset);
+}
+span.btn a:hover {
+  transform: translateZ(-$offset) rotateX(-90deg);
+}

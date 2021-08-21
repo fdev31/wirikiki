@@ -1,0 +1,78 @@
+<div class="modal micromodal-slide" id="modal-help" aria-hidden="true">
+  <div class="modal__overlay" tabindex="-1" data-micromodal-close>
+    <div
+      class="modal__container"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="modal-1-title"
+    >
+      <header class="modal__header">
+        <h2 class="modal__title" id="modal-1-title">Help</h2>
+        <button
+          class="modal__close"
+          aria-label="Close modal"
+          data-micromodal-close
+        ></button>
+      </header>
+      <main class="modal__content" id="modal-1-content">
+        <h3>Shortcuts</h3>
+        <ul>
+          <li><b>e</b> Edit</li>
+          <li><b>escape</b> Save (return to view mode)</li>
+          <li><b>delete</b> Delete this note</li>
+          <li><b>backspace</b> Toggle the side bar display</li>
+          <li><b>left/right</b> Navigate</li>
+        </ul>
+      </main>
+      <footer class="modal__footer">
+        <button
+          class="modal__btn"
+          data-micromodal-close
+          aria-label="Close this dialog window"
+        >
+          Close
+        </button>
+      </footer>
+    </div>
+  </div>
+</div>
+
+<div class="modal micromodal-slide" id="modal-delete" aria-hidden="true">
+  <div class="modal__overlay" tabindex="-1" data-micromodal-close>
+    <div
+      class="modal__container"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="modal-1-title"
+    >
+      <header class="modal__header">
+        <h2 class="modal__title" id="modal-1-title">Delete {{itemName}} ?</h2>
+        <button
+          class="modal__close"
+          aria-label="Close modal"
+          data-micromodal-close
+        ></button>
+      </header>
+      <main class="modal__content" id="modal-1-content">
+        <h3>Are you sure you want to delete {{itemName}} ?</h3>
+      </main>
+      <footer class="modal__footer">
+        <button
+          class="modal__btn modal__btn-primary"
+          data-micromodal-close
+          aria-label="Close this dialog window"
+          @click="runConfirmation()"
+        >
+          Yes
+        </button>
+        <button
+          class="modal__btn"
+          data-micromodal-close
+          aria-label="Close this dialog window"
+        >
+          Close
+        </button>
+      </footer>
+    </div>
+  </div>
+</div>
