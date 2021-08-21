@@ -142,8 +142,6 @@ export default {
         this.$originalContent = this.markdownText;
         setTimeout(() => {
           let ta = gE("textarea");
-          ta.style.height = ta.scrollHeight + "px";
-          ta.focus();
           simplemde = new SimpleMDE({ element: ta });
           simplemde.value(this.$originalContent);
         }, 1);
