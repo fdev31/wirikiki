@@ -126,6 +126,7 @@ export default {
       if (success) {
         const idx = this.pages.length;
         this.pages.push({ name, content });
+        pagesByName.set(name, idx);
         this.openPage(idx);
       }
     },
