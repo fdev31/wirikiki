@@ -17,6 +17,9 @@ async function saveDoc(docId, content) {
 const pagesByName = new Map();
 
 export default {
+  mounted() {
+    this.toggleDark();
+  },
   computed: {
     toggleButtonCaption() {
       return (this.sidebarHidden && ">>") || "<<";
