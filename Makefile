@@ -9,7 +9,7 @@ watch:
 	./node_modules/.bin/rollup -c rollup.config.js -w
 
 vueapps: dev
-	sh makevueApps.sh
+	./makevueApps.sh
 
 dev:
 	npm install
