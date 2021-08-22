@@ -26,8 +26,8 @@ export default {
     markdownRender() {
       // Escape [[ some link ]] syntax
       let source = this.markdownText.replace(
-        /\[\[([^\]]+)\]\]/g,
-        (...args) => `[${args[1]}](:${encodeURIComponent(args[1])})`
+        /([^`])\[\[([^\]]+)\]\]/g,
+        (...args) => `${args[1]}[${args[2]}](:${encodeURIComponent(args[1])})`
       );
       for (const plug of plugins.prerender) {
         source = plug(source);
