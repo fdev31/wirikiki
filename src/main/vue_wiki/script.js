@@ -20,15 +20,12 @@ export default {
       return false;
     },
     toggleDark() {
-      if (gE("body").classList.contains("dark")) {
-        gE("body").classList.remove("dark");
-        gE("#main").classList.remove("dark");
-        gE("#sidebar").classList.remove("dark");
-      } else {
-        gE("body").classList.add("dark");
-        gE("#main").classList.add("dark");
-        gE("#sidebar").classList.add("dark");
-      }
+      const themeSelectors = ["body", "#main", "#sidebar"];
+      const darkClass = "dark";
+      const action = gE(themeSelectors[0]).classList.contains("dark")
+        ? "remove"
+        : "add";
+      themeSelectors.forEach((name) => gE(name).classList[action](darkClass));
     },
     setContent(pages) {
       this.pages = pages;
