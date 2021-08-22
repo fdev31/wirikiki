@@ -10,10 +10,14 @@ ul.contains-task-list {
 a,
 a:visited {
   color: darken(vars.$primary-color, vars.$shade-delta);
+  text-decoration: none;
 }
 .dark a,
 .dark a:visited {
   color: lighten(vars.$primary-color, 2 * vars.$shade-delta);
+}
+a:hover {
+  text-decoration: underline;
 }
 pre {
   background: #e4e4e4;
