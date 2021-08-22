@@ -1,4 +1,5 @@
 #!/bin/sh
+SOUND="/usr/share/sounds/gnome/default/alerts/glass.ogg"
 
 make
 echo "BUILT"
@@ -17,4 +18,5 @@ done
 while true; do
     inotifywait -q -e MODIFY ${WATCHED}
     make vueapps
+    play $SOUND
 done
