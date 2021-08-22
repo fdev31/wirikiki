@@ -1,8 +1,12 @@
 #!/bin/sh
 
-make vueapps
-make serve &
+make
+echo "BUILT"
 make watch &
+sleep 1
+echo "UNDER WATCH"
+make serve &
+
 
 WATCHED=""
 
