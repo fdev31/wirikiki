@@ -28,19 +28,23 @@ span.btn a:after {
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 5px solid black;
+  border: none;
   box-sizing: border-box;
   border-radius: 5px;
 }
 span.btn a:before {
-  color: #fff;
-  background: #000;
+  color: darken(vars.$secondary-color, 50%);
+  background: vars.$background-color;
   transform: rotateY(0deg) translateZ($offset);
+}
+.dark span.btn a:before {
+  color: vars.$secondary-color;
+  background: vars.$background-color-dark;
 }
 span.btn a:after {
   color: vars.$primary-color;
   transform: rotateX(90deg) translateZ($offset);
 }
 span.btn a:hover {
-  transform: translateZ(-$offset) rotateX(-90deg);
+  transform: translateZ(-$offset * 2) rotateX(-90deg);
 }
