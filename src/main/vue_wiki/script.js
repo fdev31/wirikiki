@@ -147,10 +147,11 @@ export default {
         "Search",
         { hasInput: true },
         async (pat) => {
+          const lowPat = pat.toLowerCase();
           this._matching.clear();
           let firstMatch = null;
           for (let page of this.pages) {
-            if (page.content.indexOf(pat) != -1) {
+            if (page.content.toLowerCase().indexOf(lowPat) != -1) {
               this._matching.add(page.name);
               if (firstMatch == null) firstMatch = page.name;
             }
