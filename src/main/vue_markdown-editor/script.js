@@ -24,20 +24,14 @@ export default {
   },
   computed: {
     markdownRender() {
-      // Escape [[ some link ]] syntax
-      let source = this.markdownText.replace(
-        /([^`])\[\[([^\]]+)\]\]/g,
-        (...args) => `${args[1]}[${args[2]}](:${encodeURIComponent(args[1])})`
+      let source = plugins.prerender.reduce(
+        (text, handler) => handler(text),
+        this.markdownText
       );
-      for (const plug of plugins.prerender) {
-        source = plug(source);
-      }
-
-      let render = md.render(source);
-      for (const plug of plugins.postrender) {
-        render = plug(render);
-      }
-      return render;
+      return plugins.postrender.reduce(
+        (text, handler) => handler(text),
+        md.render(source)
+      );
     },
   },
   methods: {

@@ -15,11 +15,6 @@ function vueDebounce(el, binding) {
   }
 }
 
-export function openlink(text) {
-  let link = decodeURIComponent(text);
-  vue.openPageByName(link);
-}
-
 export let vue = null;
 
 const keyHandlers = {
@@ -67,16 +62,33 @@ const keyHandlers = {
   },
 };
 
-export function init() {
-  // register plugins
-  // convert intern refs to "openlink" calls
+export function openlink(text) {
+  let link = decodeURIComponent(text);
+  vue.openPageByName(link);
+}
+
+function initInternalLinks() {
+  // converts intern refs to "openlink" calls
   markdownEditor.addPlugin("postrender", (text) =>
     text.replace(
       /<a href=":([^"]+)/g,
       (...args) => `<a href="#" onclick="app.openlink('${args[1]}')`
     )
   );
+  markdownEditor.addPlugin("prerender", (text) =>
+    text.replace(/(.\s*)\[\[([^\]]+)\]\]/g, (match, prefix, text) => {
+      if (match[0] == "\\") {
+        return `[[${prefix.slice(1)}${text}]]`;
+      } else {
+        return `${prefix}[${text}](:${encodeURIComponent(text)})`;
+      }
+    })
+  );
+}
 
+export function init() {
+  // register plugins
+  initInternalLinks();
   // build the app
   const vu = createApp(wiki);
   vu.directive("debounce", vueDebounce);

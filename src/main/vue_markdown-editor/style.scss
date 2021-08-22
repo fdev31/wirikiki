@@ -5,7 +5,8 @@
 }
 
 ul.contains-task-list {
-  list-style-type: circle;
+  list-style-type: none;
+  padding: 0 1ex;
 }
 a,
 a:visited {
@@ -25,4 +26,45 @@ pre {
   padding: 1ex;
   border-radius: 1ex;
   overflow-x: auto;
+}
+
+abbr {
+  cursor: help;
+}
+dt {
+  text-decoration: underline;
+}
+
+/* tables formatting */
+
+table {
+  border-collapse: collapse;
+}
+
+$tableborder: solid 1px vars.$front-color;
+$tableborder-dark: solid 1px vars.$front-color-dark;
+
+tr {
+  border-bottom: $tableborder;
+}
+td,
+th {
+  border-right: $tableborder;
+  padding: 0.5ex 1ex;
+}
+.dark tr {
+  border-bottom: $tableborder-dark;
+}
+.dark td,
+.dark th {
+  border-right: $tableborder-dark;
+}
+
+td:last-child,
+th:last-child {
+  border-right: none;
+}
+
+tbody > tr:last-child {
+  border-bottom: none;
 }
