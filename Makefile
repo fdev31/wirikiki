@@ -18,7 +18,7 @@ clean:
 	rm -fr apps/*.js apps/*.css apps/*.map
 	rm -fr venv
 	rm -fr src/*/*.vue
-	rm ${DISTFILE}
+	rm -fr ${DISTFILE}
 
 serve: venv
 	./venv/bin/uvicorn server:app --reload --port 8000 --log-level=debug
