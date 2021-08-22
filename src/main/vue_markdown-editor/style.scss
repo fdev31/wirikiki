@@ -1,9 +1,24 @@
-#editor.dark,
-#sidebar.dark {
-  background-color: #555;
-  color: #ccc;
+@use 'variables' as vars;
+
+.editor-toolbar {
+  background-color: white !important;
 }
 
 ul.contains-task-list {
   list-style-type: circle;
+}
+a,
+a:visited {
+  color: darken(vars.$primary-color, vars.$shade-delta);
+}
+.dark a,
+.dark a:visited {
+  color: lighten(vars.$primary-color, 2 * vars.$shade-delta);
+}
+pre {
+  background: #e4e4e4;
+  color: #111;
+  padding: 1ex;
+  border-radius: 1ex;
+  overflow-x: auto;
 }

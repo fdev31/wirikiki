@@ -1,6 +1,4 @@
-/**************************\
-  Basic Modal Styles
-\**************************/
+@use 'variables' as vars;
 
 .modal {
   font-family: -apple-system, BlinkMacSystemFont, avenir next, avenir,
@@ -20,13 +18,16 @@
 }
 
 .modal__container {
-  background-color: #fff;
+  background-color: vars.$background-color;
   padding: 30px;
   max-width: 500px;
   max-height: 100vh;
   border-radius: 4px;
   overflow-y: auto;
   box-sizing: border-box;
+}
+.dark .modal__container {
+  background-color: vars.$background-color-dark;
 }
 
 .modal__header {
@@ -41,12 +42,13 @@
   font-weight: 600;
   font-size: 1.25rem;
   line-height: 1.25;
-  color: #00449e;
+  color: vars.$primary-color;
   box-sizing: border-box;
 }
 
 .modal__close {
   background: transparent;
+  color: vars.$primary-color;
   border: 0;
 }
 
@@ -58,7 +60,10 @@
   margin-top: 2rem;
   margin-bottom: 2rem;
   line-height: 1.5;
-  color: rgba(0, 0, 0, 0.8);
+  color: vars.$front-color;
+}
+.dark .modal__content {
+  color: vars.$front-color-dark;
 }
 
 .modal__btn {
@@ -67,7 +72,7 @@
   padding-right: 1rem;
   padding-top: 0.5rem;
   padding-bottom: 0.5rem;
-  background-color: #e6e6e6;
+  background-color: darken(vars.$background-color, 20%);
   color: rgba(0, 0, 0, 0.8);
   border-radius: 0.25rem;
   border-style: none;
@@ -88,6 +93,9 @@
   transition: transform 0.25s ease-out;
   transition: transform 0.25s ease-out, -webkit-transform 0.25s ease-out;
 }
+.dark .modal__btn {
+  background-color: lighten(vars.$background-color-dark, 20%);
+}
 
 .modal__btn:focus,
 .modal__btn:hover {
@@ -95,9 +103,13 @@
   transform: scale(1.05);
 }
 
+.dark .modal__btn-primary {
+  background-color: vars.$background2-color-dark;
+  color: vars.$front-color-dark;
+}
 .modal__btn-primary {
-  background-color: #00449e;
-  color: #fff;
+  background-color: vars.$background2-color;
+  color: vars.$front-color;
 }
 
 /**************************\

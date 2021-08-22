@@ -1,1 +1,17 @@
-$primary-color: #67c2ff;
+// general defs
+
+$primary-color: #528dc2;
+$secondary-color: rgb(230, 206, 162);
+
+$shadow-color: #100;
+$shade-delta: 15%;
+
+// theme specific definitions
+
+$front-color: rgb(37, 37, 37);
+$background-color: #dfedf7;
+$background2-color: desaturate(darken($background-color, 15%), 40%);
+
+$front-color-dark: #ddd;
+$background-color-dark: #333;
+$background2-color-dark: desaturate(darken($background-color-dark, 5%), 10%);
