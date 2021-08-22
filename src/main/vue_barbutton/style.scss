@@ -1,8 +1,8 @@
 @use 'variables' as vars;
 
 $width: 100px;
-$height: 40px;
-$offset: 20px;
+$height: 30px;
+$offset: 25px;
 
 span.btn {
   position: relative;
@@ -30,7 +30,6 @@ span.btn a:after {
   justify-content: center;
   border: none;
   box-sizing: border-box;
-  border-radius: 5px;
 }
 span.btn a:before {
   color: darken(vars.$secondary-color, 50%);
