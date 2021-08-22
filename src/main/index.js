@@ -68,12 +68,23 @@ const keyHandlers = {
 };
 
 export function init() {
+  // register plugins
+  // convert intern refs to "openlink" calls
+  markdownEditor.addPlugin("postrender", (text) =>
+    text.replace(
+      /<a href=":([^"]+)/g,
+      (...args) => `<a href="#" onclick="app.openlink('${args[1]}')`
+    )
+  );
+
+  // build the app
   const vu = createApp(wiki);
   vu.directive("debounce", vueDebounce);
   vu.component("bar-button", barbutton);
   vu.component("markdown-editor", markdownEditor);
   vu.component("modals", modals);
   vue = vu.mount("#app");
+
   fetch("/notebooks").then((req) => {
     req.json().then(vue.setContent);
   });

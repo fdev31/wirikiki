@@ -8,17 +8,13 @@ const plugins = {
     (text) => text.replace(/=>/g, () => "⇒"),
     (text) => text.replace(/-->/g, () => "⟶"),
   ],
-  postrender: [
-    // convert intern refs to "openlink" calls
-    (text) =>
-      text.replace(
-        /<a href=":([^"]+)/g,
-        (...args) => `<a href="#" onclick="app.openlink('${args[1]}')`
-      ),
-  ],
+  postrender: [],
 };
 
 export default {
+  addPlugin(plugType, handler) {
+    plugins[plugType].push(handler);
+  },
   emits: ["docChanged"],
   data() {
     return {
