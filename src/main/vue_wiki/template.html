@@ -13,13 +13,12 @@
 </div>
 <div id="sidebar">
   <div
-    v-for="(page, idx) in pages"
-    v-on:click="openPage(idx)"
+    v-for="page in pages"
+    v-on:click="openPageByName(page.name)"
     :class="getTabClasses(page.name)"
     :key="page.name"
   >
-    <b v-if="idx == pageIndex"> {{page.name}} </b>
-    <span v-else>{{page.name}}</span>
+    {{page.name}}
   </div>
   <div v-on:click="newPage()" class="pageTab"><b>+ Add new</b></div>
 </div>

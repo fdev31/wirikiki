@@ -87,6 +87,9 @@ pre {
   padding: 0 0.5ex 0 0.5ex;
   border: solid 1px rgba(0, 0, 0, 0.3);
 }
+.pageTab.opened {
+  font-weight: bold;
+}
 .pageTab:hover {
   @include shadowed();
   @include animateSlow(0.35s);

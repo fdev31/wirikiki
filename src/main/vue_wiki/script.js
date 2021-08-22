@@ -46,7 +46,7 @@ export default {
     switchPage(direction) {
       let newIdx = this.pageIndex + direction;
       if (newIdx >= 0 && newIdx < this.pages.length) {
-        this.pageIndex = newIdx;
+        this.pageIndex = parseInt(newIdx);
         this.openPage(newIdx);
       }
     },
@@ -79,6 +79,7 @@ export default {
     getTabClasses(name) {
       const c = ["pageTab"];
       if (this._matching.has(name)) c.push("matchSearch");
+      if (this.pageTitle == name) c.push("opened");
       return c.join(" ");
     },
     async newPage() {
@@ -105,10 +106,14 @@ export default {
       }
     },
     openPage(idx) {
-      let page = this.pages[idx];
+      let page = this.pages[parseInt(idx)];
+      if (!page) {
+        console.error(`Can't open page number ${idx}`);
+        return;
+      }
       this.pageTitle = page.name;
       this.$refs.editor.markdownText = page.content;
-      this.pageIndex = idx;
+      this.pageIndex = parseInt(idx);
     },
     toggleEditor() {
       this.$refs.editor.toggleEditor();
