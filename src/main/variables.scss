@@ -13,5 +13,5 @@ $background-color: #dfedf7;
 $background2-color: desaturate(darken($background-color, 15%), 40%);
 
 $front-color-dark: #ddd;
-$background-color-dark: #333;
+$background-color-dark: rgb(52, 52, 54);
 $background2-color-dark: desaturate(darken($background-color-dark, 5%), 10%);
