@@ -17,6 +17,7 @@ dev:
 clean:
 	rm -fr apps/*.js apps/*.css apps/*.map
 	rm -fr venv
+	rm -fr src/*/*.vue
 	rm ${DISTFILE}
 
 serve: venv
