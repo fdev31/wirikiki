@@ -16,7 +16,8 @@ export default {
   },
   methods: {
     editorMode() {
-      return this.$refs.editor.editorMode;
+      if (this.$refs.editor) return this.$refs.editor.editorMode;
+      return false;
     },
     toggleDark() {
       if (gE("body").classList.contains("dark")) {
