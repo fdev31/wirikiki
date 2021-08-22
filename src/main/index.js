@@ -91,6 +91,7 @@ export function init() {
 
   // install global key handlers
   document.onkeyup = function (evt) {
+    if (vue.$refs.modals.active()) return;
     const name = (evt || window.event).key;
     if (keyHandlers[name]) keyHandlers[name]();
   };

@@ -1,3 +1,5 @@
+<!-- HELP -->
+
 <div class="modal micromodal-slide" id="modal-help" aria-hidden="true">
   <div class="modal__overlay" tabindex="-1" data-micromodal-close>
     <div
@@ -38,7 +40,9 @@
   </div>
 </div>
 
-<div class="modal micromodal-slide" id="modal-delete" aria-hidden="true">
+<!-- Generic action -->
+
+<div class="modal micromodal-slide" id="modal-action" aria-hidden="true">
   <div class="modal__overlay" tabindex="-1" data-micromodal-close>
     <div
       class="modal__container"
@@ -47,16 +51,21 @@
       aria-labelledby="modal-1-title"
     >
       <header class="modal__header">
-        <h2 class="modal__title" id="modal-1-title">Delete {{itemName}} ?</h2>
+        <h2 class="modal__title" id="modal-1-title">{{title}}</h2>
         <button
           class="modal__close"
           aria-label="Close modal"
           data-micromodal-close
         ></button>
       </header>
-      <main class="modal__content" id="modal-1-content">
-        <h3>Are you sure you want to delete {{itemName}} ?</h3>
-      </main>
+      <main class="modal__content" id="modal-1-content" v-html="content"></main>
+      <input
+        type="text"
+        class="userInput"
+        v-if="hasInput"
+        v-model="userInput"
+        v-on:keyup.enter="runConfirmation()"
+      />
       <footer class="modal__footer">
         <button
           class="modal__btn modal__btn-primary"
@@ -64,14 +73,14 @@
           aria-label="Close this dialog window"
           @click="runConfirmation()"
         >
-          Yes
+          {{actionName}}
         </button>
         <button
           class="modal__btn"
           data-micromodal-close
           aria-label="Close this dialog window"
         >
-          Close
+          Cancel
         </button>
       </footer>
     </div>

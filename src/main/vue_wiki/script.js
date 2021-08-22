@@ -53,23 +53,29 @@ export default {
         alert("You can't make the Notebook empty.");
         return;
       }
-      this.$refs.modals.deleteConfirmation(this.pageTitle, async () => {
-        let success = false;
-        try {
-          await fetch(`/notebook?name=${this.pageTitle}`, { method: "DELETE" });
-          success = true;
-        } catch (err) {
-          console.error(err);
-        }
-        if (success) {
-          pagesByName.delete(this.pageTitle);
-          this.pages.splice(this.pageIndex, 1);
-          if (this.pages.length - 1 == this.pageIndex) {
-            this.pageIndex--;
+      this.$refs.modals.askUser(
+        `Delete ${this.pageTitle}`,
+        `<h3>Are you sure you want to delete ${this.pageTitle}?</h3>`,
+        "Delete",
+        {},
+        async () => {
+          let success = false;
+          try {
+            await fetch(`/notebook?name=${this.pageTitle}`, {
+              method: "DELETE",
+            });
+            success = true;
+          } catch (err) {
+            console.error(err);
           }
-          this.openPage(this.pageIndex);
+          if (success) {
+            pagesByName.delete(this.pageTitle);
+            this.pages.splice(this.pageIndex, 1);
+            if (this.pageIndex) this.pageIndex--;
+            this.openPage(this.pageIndex);
+          }
         }
-      });
+      );
     },
     async savePage() {
       await saveDoc(this.pageTitle, this.$refs.editor.markdownText);
@@ -81,27 +87,35 @@ export default {
       return c.join(" ");
     },
     async newPage() {
-      const name = prompt("New page name:");
-      if (!name) return;
-      const content = "# To be written";
-      let success = false;
-      try {
-        await fetch("/notebook", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ name, content }),
-        });
-        success = true;
-      } catch (err) {
-        alert("Error happened");
-        console.error(err);
-      }
-      if (success) {
-        const idx = this.pages.length;
-        this.pages.push({ name, content });
-        pagesByName.set(name, idx);
-        this.openPage(idx);
-      }
+      this.$refs.modals.askUser(
+        `Create a new note`,
+        `Type the name for the new note:`,
+        "Create",
+        { hasInput: true },
+        async (name) => {
+          console.log("NEW", name);
+          if (!name) return;
+          const content = "# To be written";
+          let success = false;
+          try {
+            await fetch("/notebook", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ name, content }),
+            });
+            success = true;
+          } catch (err) {
+            alert("Error happened");
+            console.error(err);
+          }
+          if (success) {
+            const idx = this.pages.length;
+            this.pages.push({ name, content });
+            pagesByName.set(name, idx);
+            this.openPage(idx);
+          }
+        }
+      );
     },
     openPage(idx) {
       let page = this.pages[parseInt(idx)];
@@ -127,20 +141,29 @@ export default {
       }
     },
     searchMode() {
-      let pat = prompt("Search for:");
-      if (!pat) return;
-      this._matching.clear();
-      let firstMatch = null;
-      for (let page of this.pages) {
-        if (page.content.indexOf(pat) != -1) {
-          this._matching.add(page.name);
-          if (firstMatch == null) firstMatch = page.name;
+      this.$refs.modals.askUser(
+        `Find something`,
+        `Type the pattern you are searching for`,
+        "Search",
+        { hasInput: true },
+        async (pat) => {
+          this._matching.clear();
+          let firstMatch = null;
+          for (let page of this.pages) {
+            if (page.content.indexOf(pat) != -1) {
+              this._matching.add(page.name);
+              if (firstMatch == null) firstMatch = page.name;
+            }
+          }
+          if (firstMatch != null) {
+            this.openPageByName(firstMatch);
+            setTimeout(() => {
+              window.getSelection().empty();
+              window.find(pat);
+            }, 1);
+          }
         }
-      }
-      if (firstMatch != null) {
-        this.openPageByName(firstMatch);
-        setTimeout(() => window.find(pat), 1);
-      }
+      );
     },
     showHelp() {
       this.$refs.modals.showHelp();
