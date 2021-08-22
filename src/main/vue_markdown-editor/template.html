@@ -1,0 +1,10 @@
+<div id="editor">
+  <textarea
+    tabindex="0"
+    v-on:keypress.enter="onReturnKey"
+    v-if="editorMode"
+    v-model="markdownText"
+    v-debounce="500"
+  ></textarea>
+  <div v-else v-html="markdownRender"></div>
+</div>

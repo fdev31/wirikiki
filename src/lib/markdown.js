@@ -18,14 +18,3 @@ export const md = new markdownit({
   },
 });
 md.use(markdownittasklists);
-md.linkify.add("file:", {
-  validate(text, pos, self) {
-    var tail = text.slice(pos);
-    console.log("TAIL", tail);
-    return tail.match(/^([^)]+)\)/)[0].length - 1;
-  },
-  normalize(match) {
-    console.log("url", match.url);
-    match.url = "file:" + match.url;
-  },
-});

@@ -23,11 +23,6 @@ body.dark {
   background-color: #333;
   color: #bbb;
 }
-#editor.dark,
-#sidebar.dark {
-  background-color: #555;
-  color: #ccc;
-}
 #topbar > h1,
 h1.toptitle {
   color: vars.$primary-color;
@@ -65,18 +60,6 @@ h1.toptitle {
 #main.fullscreen {
   margin: 1ex 1ex 1ex 1ex;
 }
-#fsbutton {
-  position: fixed;
-  left: 0;
-  top: 0;
-  display: block;
-}
-#fsbutton:hover {
-  @include shadowed();
-  @include animateSlow(80ms);
-  left: 1px;
-  top: 1px;
-}
 .matchSearch {
   background-color: #eea !important;
   color: #333 !important;
@@ -113,7 +96,4 @@ pre {
   margin-left: 1%;
   border-radius: 5px;
   color: #333;
-}
-ul.contains-task-list {
-  list-style-type: circle;
 }

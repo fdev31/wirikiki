@@ -3,6 +3,7 @@ import { createApp } from "vue";
 import wiki from "./wiki.vue";
 import barbutton from "./barbutton.vue";
 import modals from "./modals.vue";
+import markdownEditor from "./markdown-editor.vue";
 
 // XXX: borrowed from https://stackoverflow.com/questions/64990541/how-to-implement-debounce-in-vue3
 function vueDebounce(el, binding) {
@@ -23,44 +24,44 @@ export let vue = null;
 
 const keyHandlers = {
   Escape() {
-    if (vue.editorMode) {
+    if (vue.$refs.editor.editorMode) {
       vue.toggleEditor();
     } else {
       vue.toggleSide();
     }
   },
   f() {
-    if (!vue.editorMode) {
+    if (!vue.$refs.editor.editorMode) {
       vue.searchMode();
     }
   },
   e() {
-    if (!vue.editorMode) {
+    if (!vue.$refs.editor.editorMode) {
       vue.toggleEditor();
     }
   },
   n() {
-    if (!vue.editorMode) {
+    if (!vue.$refs.editor.editorMode) {
       vue.newPage();
     }
   },
   Delete() {
-    if (!vue.editorMode) {
+    if (!vue.$refs.editor.editorMode) {
       vue.deletePage();
     }
   },
   Backspace() {
-    if (!vue.editorMode) {
+    if (!vue.$refs.editor.editorMode) {
       vue.toggleSide();
     }
   },
   ArrowLeft() {
-    if (!vue.editorMode) {
+    if (!vue.$refs.editor.editorMode) {
       vue.switchPage(-1);
     }
   },
   ArrowRight() {
-    if (!vue.editorMode) {
+    if (!vue.$refs.editor.editorMode) {
       vue.switchPage(1);
     }
   },
@@ -70,6 +71,7 @@ export function init() {
   const vu = createApp(wiki);
   vu.directive("debounce", vueDebounce);
   vu.component("bar-button", barbutton);
+  vu.component("markdown-editor", markdownEditor);
   vu.component("modals", modals);
   vue = vu.mount("#app");
   fetch("/notebooks").then((req) => {

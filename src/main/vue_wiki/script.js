@@ -1,10 +1,4 @@
-import { md } from "../lib/markdown";
-
-let simplemde = null;
-
-const gE = (d) => document.querySelector(d);
-
-const E = (s) => JSON.parse(JSON.stringify(s));
+import { gE } from "../lib/utils";
 
 async function saveDoc(docId, content) {
   let req = await fetch("/notebook", {
@@ -20,29 +14,10 @@ export default {
   mounted() {
     this.toggleDark();
   },
-  computed: {
-    toggleButtonCaption() {
-      return (this.sidebarHidden && ">>") || "<<";
-    },
-    markdownRender() {
-      // Escape [[ some link ]] syntax
-      let source = this.markdownText.replace(
-        /\[\[([^\]]+)\]\]/g,
-        (...args) => `[${args[1]}](:${encodeURIComponent(args[1])})`
-      );
-      source = source.replace(/=>/g, () => "⇒");
-      source = source.replace(/->/g, () => "→");
-      source = source.replace(/-->/g, () => "⟶");
-
-      const r = md.render(source);
-      // convert intern refs to "openlink" calls
-      return r.replace(
-        /<a href=":([^"]+)/g,
-        (...args) => `<a href="#" onclick="app.openlink('${args[1]}')`
-      );
-    },
-  },
   methods: {
+    editorMode() {
+      return this.$refs.editor.editorMode;
+    },
     toggleDark() {
       if (gE("body").classList.contains("dark")) {
         gE("body").classList.remove("dark");
@@ -52,13 +27,6 @@ export default {
         gE("body").classList.add("dark");
         gE("#main").classList.add("dark");
         gE("#sidebar").classList.add("dark");
-      }
-    },
-    onReturnKey(evt) {
-      if (evt.ctrlKey) {
-        this.toggleEditor();
-      } else {
-        gE("textarea").style.height = gE("textarea").scrollHeight + "px";
       }
     },
     setContent(pages) {
@@ -105,6 +73,9 @@ export default {
         }
       });
     },
+    async savePage() {
+      await saveDoc(this.pageTitle, this.$refs.editor.markdownText);
+    },
     getTabClasses(name) {
       const c = ["pageTab"];
       if (this._matching.has(name)) c.push("matchSearch");
@@ -136,25 +107,11 @@ export default {
     openPage(idx) {
       let page = this.pages[idx];
       this.pageTitle = page.name;
-      this.markdownText = page.content;
+      this.$refs.editor.markdownText = page.content;
       this.pageIndex = idx;
     },
     toggleEditor() {
-      this.editorMode = !this.editorMode;
-      if (this.editorMode) {
-        this.$originalContent = this.markdownText;
-        setTimeout(() => {
-          let ta = gE("textarea");
-          simplemde = new SimpleMDE({ element: ta });
-          simplemde.value(this.$originalContent);
-        }, 1);
-      } else {
-        this.markdownText = simplemde.value();
-        simplemde.toTextArea();
-        if (this.$originalContent != this.markdownText) {
-          saveDoc(this.pageTitle, this.markdownText);
-        }
-      }
+      this.$refs.editor.toggleEditor();
     },
     toggleSide() {
       this.sidebarHidden = !this.sidebarHidden;
@@ -192,9 +149,7 @@ export default {
       pages: [],
       sidebarHidden: false,
       pageTitle: "Wiki",
-      markdownText: "",
       pageIndex: -1,
-      editorMode: false,
     };
   },
 };

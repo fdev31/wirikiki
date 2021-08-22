@@ -24,15 +24,6 @@
   <div v-on:click="newPage()" class="pageTab"><b>+ Add new</b></div>
 </div>
 <div id="main">
-  <div id="editor">
-    <textarea
-      tabindex="0"
-      v-on:keypress.enter="onReturnKey"
-      v-if="editorMode"
-      v-model="markdownText"
-      v-debounce="500"
-    ></textarea>
-    <div v-else v-html="markdownRender"></div>
-  </div>
+  <markdown-editor ref="editor" @docChanged="savePage"></markdown-editor>
 </div>
 <modals ref="modals"></modals>
