@@ -3,7 +3,7 @@
     <span @click="toggleSide()">{{pageTitle}}</span>
     <span id="barbuttons">
       <bar-button caption="Search" @click="searchMode()" />
-      <bar-button v-if="editorMode()" caption="View" @click="toggleEditor()" />
+      <bar-button v-if="editorMode()" caption="Save" @click="toggleEditor()" />
       <bar-button v-else caption="Edit" @click="toggleEditor()" />
       <bar-button caption="Delete" @click="deletePage()" />
       <bar-button caption="Color" @click="toggleDark()" />
