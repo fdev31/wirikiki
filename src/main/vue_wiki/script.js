@@ -78,7 +78,8 @@ export default {
       );
     },
     async savePage() {
-      await saveDoc(this.pageTitle, this.$refs.editor.markdownText);
+        this.pages[pagesByName.get(this.pageTitle)].content = this.$refs.editor.markdownText;
+        await saveDoc(this.pageTitle, this.$refs.editor.markdownText);
     },
     getTabClasses(name) {
       const c = ["pageTab"];
