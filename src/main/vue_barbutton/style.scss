@@ -1,49 +1,36 @@
 @use 'variables' as vars;
 
-$width: 100px;
-$height: 30px;
-$offset: 25px;
-
 span.btn {
-  position: relative;
-  display: inline-flex;
-  width: $width;
-  height: $height;
-  margin: 5px 15px 0 0;
-  perspective: 1000px;
+  margin: 0 0.5ex;
+  background-color: vars.$background-color;
+  border-radius: 10px;
+  transition-duration: 150ms;
+  font-size: 80%;
+  width: 300px;
 }
+.dark span.btn {
+  background-color: vars.$background-color-dark;
+}
+
+span.btn:hover {
+  background-color: rgba(vars.$front-color, 0.1);
+  transition-duration: 300ms;
+  box-shadow: 0 6px 3px -4px vars.$front-color;
+  //  font-size: 100%; // FIXME: nice zoom animation
+}
+
+.dark span.btn:hover {
+  transition-duration: 300ms;
+  box-shadow: 0 6px 3px -4px vars.$front-color-dark;
+  background-color: rgba(vars.$front-color-dark, 0.1);
+}
+
 span.btn a {
-  font-size: 19px;
-  letter-spacing: 1px;
-  transform-style: preserve-3d;
-  transform: translateZ(-$offset);
-  transition: transform 0.25s;
+  padding: 0 0.5ex;
+  transition-duration: 150ms;
 }
-span.btn a:before,
-span.btn a:after {
-  position: absolute;
-  content: attr(data-caption);
-  height: $height;
-  width: $width;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: none;
-  box-sizing: border-box;
-}
-span.btn a:before {
-  color: darken(vars.$secondary-color, 50%);
-  background: vars.$background-color;
-  transform: rotateY(0deg) translateZ($offset);
-}
-.dark span.btn a:before {
-  color: vars.$secondary-color;
-  background: vars.$background-color-dark;
-}
-span.btn a:after {
-  color: vars.$primary-color;
-  transform: rotateX(90deg) translateZ($offset);
-}
+
 span.btn a:hover {
-  transform: translateZ(-$offset * 2) rotateX(-90deg);
+  text-decoration: none;
+  transition-duration: 150ms;
 }
