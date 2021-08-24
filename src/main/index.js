@@ -101,8 +101,10 @@ export function init() {
     req.json().then(vue.setContent);
   });
 
+  const globalTags = ["BODY", "TEXTAREA"];
   // install global key handlers
   document.onkeyup = function (evt) {
+    if (globalTags.indexOf(evt.target.tagName) == -1) return;
     if (vue.$refs.modals.active()) return;
     const name = (evt || window.event).key;
     if (keyHandlers[name]) keyHandlers[name]();
