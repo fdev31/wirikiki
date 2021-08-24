@@ -1,5 +1,13 @@
 # Installation
 
+## Building
+
+3 alternatives way to get a runnable code:
+
+- download a release (TODO)
+- `make dist`
+- manual installation
+
 ```
 sh ./makevueApps.sh
 npm install
@@ -8,8 +16,7 @@ DIST=1 ./node_modules/.bin/rollup -c rollup.config.js
 
 # Usage
 
-1. Download a dist file (_TODO - no release yet_) or type `make dist` after downloading the project.
-1. execute `run.sh`
+Just execute `run.sh`, it will automatically install the python virtual environment
 
 ## Keyboard shortcuts
 
@@ -30,3 +37,13 @@ Basic git support is provided, to enable it just type `git init` in the `myKB` f
 cd myKB
 git init
 ```
+
+# Dependencies
+
+- **Python 3**
+  - if you want to run it **without the virtualenv** you will need the following python packages:
+    - aiofiles
+    - fastapi
+    - uvicorn
+- nodejs and npm (BUILD ONLY)
+- inotify-tools (DEV ONLY)
