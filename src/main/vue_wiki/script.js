@@ -25,6 +25,7 @@ export default {
       const action = gE(themeSelectors[0]).classList.contains("dark")
         ? "remove"
         : "add";
+      this.isDark = action != "add";
       themeSelectors.forEach((name) => gE(name).classList[action](darkClass));
     },
     setContent(pages) {
@@ -186,6 +187,7 @@ export default {
   },
   data() {
     return {
+      isDark: true,
       _matching: new Set(),
       pages: [],
       sidebarHidden: false,
