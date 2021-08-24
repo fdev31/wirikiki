@@ -18,6 +18,9 @@ body {
     Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol",
     "Microsoft YaHei Light", sans-serif;
 }
+#editor img {
+  max-width: 100%;
+}
 body.dark {
   background-color: vars.$background-color-dark;
   color: vars.$front-color-dark;
