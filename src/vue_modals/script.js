@@ -1,4 +1,4 @@
-import { gE } from "../lib/utils";
+import { gE } from "./lib/utils";
 import MicroModal from "micromodal";
 
 MicroModal.init();

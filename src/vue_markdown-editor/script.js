@@ -1,5 +1,5 @@
-import { md } from "../lib/markdown";
-import { gE } from "../lib/utils";
+import { md } from "./lib/markdown";
+import { gE } from "./lib/utils";
 
 let simplemde = null;
 

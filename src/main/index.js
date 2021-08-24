@@ -1,9 +1,9 @@
 import { debounce } from "../lib/utils";
 import { createApp } from "vue";
 import wiki from "./wiki.vue";
-import barbutton from "./barbutton.vue";
-import modals from "./modals.vue";
-import markdownEditor from "./markdown-editor.vue";
+import barbutton from "../barbutton.vue";
+import modals from "../modals.vue";
+import markdownEditor from "../markdown-editor.vue";
 
 // XXX: borrowed from https://stackoverflow.com/questions/64990541/how-to-implement-debounce-in-vue3
 function vueDebounce(el, binding) {
