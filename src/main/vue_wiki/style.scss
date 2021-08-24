@@ -69,6 +69,12 @@ h1.toptitle {
 #main.dark {
   background-color: lighten(vars.$background-color-dark, vars.$shade-delta);
 }
+#main:hover {
+  background-color: darken(vars.$background-color, vars.$shade-delta/3);
+}
+#main.dark:hover {
+  background-color: lighten(vars.$background-color-dark, vars.$shade-delta/2);
+}
 .pageTab {
   cursor: pointer;
   width: 100%;

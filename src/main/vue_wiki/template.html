@@ -22,7 +22,7 @@
   </div>
   <div v-on:click="newPage()" class="pageTab"><b>+ Add new</b></div>
 </div>
-<div id="main">
+<div id="main" @click="$refs.editor.editorMode || toggleEditor()">
   <markdown-editor ref="editor" @docChanged="savePage"></markdown-editor>
 </div>
 <modals ref="modals"></modals>
