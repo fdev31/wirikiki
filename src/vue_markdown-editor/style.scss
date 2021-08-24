@@ -1,5 +1,17 @@
 @use 'variables' as vars;
 
+.editor-preview-side {
+  background-color: lighten(vars.$background-color, vars.$shade-delta);
+}
+
+.dark .editor-preview-side {
+  background-color: lighten(vars.$background-color-dark, vars.$shade-delta);
+}
+
+div.CodeMirror {
+  background-color: vars.$background-color;
+}
+
 .editor-toolbar {
   background-color: white !important;
 }
