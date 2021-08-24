@@ -1,11 +1,13 @@
 @use 'variables' as vars;
 
 .modal {
+  z-index: 5;
   font-family: -apple-system, BlinkMacSystemFont, avenir next, avenir,
     helvetica neue, helvetica, ubuntu, roboto, noto, segoe ui, arial, sans-serif;
 }
 
 .modal__overlay {
+  z-index: 4;
   position: fixed;
   top: 0;
   left: 0;
