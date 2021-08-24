@@ -72,6 +72,12 @@ export default {
           if (success) {
             pagesByName.delete(this.pageTitle);
             this.pages.splice(this.pageIndex, 1);
+            // re-adjust indices
+            for (let i = this.pageIndex; i < this.pages.length; i++) {
+              const name = this.pages[i].name;
+              const v = pagesByName.get(name);
+              pagesByName.set(name, v - 1);
+            }
             if (this.pageIndex) this.pageIndex--;
             this.openPage(this.pageIndex);
           }
