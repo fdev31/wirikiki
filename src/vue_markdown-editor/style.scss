@@ -10,6 +10,12 @@
 
 div.CodeMirror {
   background-color: vars.$background-color;
+  color: vars.$front-color;
+}
+
+.dark div.CodeMirror {
+  background-color: vars.$background-color-dark;
+  color: vars.$front-color-dark;
 }
 
 .editor-toolbar {
