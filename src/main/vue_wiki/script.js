@@ -127,6 +127,7 @@ export default {
       );
     },
     openPage(idx) {
+      if (this.editorMode()) this.toggleEditor();
       let page = this.pages[parseInt(idx)];
       if (!page) {
         console.error(`Can't open page number ${idx}`);
