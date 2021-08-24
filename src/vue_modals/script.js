@@ -4,9 +4,9 @@ import MicroModal from "micromodal";
 MicroModal.init();
 
 const getOptions = (obj) => {
-  {
-    onClose: obj.onClose;
-  }
+  return {
+    onClose: obj.onClose,
+  };
 };
 
 export default {
