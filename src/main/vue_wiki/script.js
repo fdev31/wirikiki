@@ -49,6 +49,7 @@ export default {
       }
     },
     async deletePage() {
+      if (this.editorMode()) this.toggleEditor();
       if (this.pages.length == 1) {
         alert("You can't make the Notebook empty.");
         return;
@@ -78,8 +79,9 @@ export default {
       );
     },
     async savePage() {
-        this.pages[pagesByName.get(this.pageTitle)].content = this.$refs.editor.markdownText;
-        await saveDoc(this.pageTitle, this.$refs.editor.markdownText);
+      this.pages[pagesByName.get(this.pageTitle)].content =
+        this.$refs.editor.markdownText;
+      await saveDoc(this.pageTitle, this.$refs.editor.markdownText);
     },
     getTabClasses(name) {
       const c = ["pageTab"];
@@ -142,6 +144,7 @@ export default {
       }
     },
     searchMode() {
+      if (this.editorMode()) this.toggleEditor();
       this.$refs.modals.askUser(
         `Find something`,
         `Type the pattern you are searching for`,
