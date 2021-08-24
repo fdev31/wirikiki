@@ -1,3 +1,9 @@
+<img
+	src="https://cdn.yourpng.com/uploads/preview/pink-welcome-word-png-transparent-background-11622180582ept25roftu.png"
+	style="width: 100%"
+	>
+</img>
+
 # Introduction
 
 This software uses the markdown syntax, you can read more about it on [this webpage](https://daringfireball.net/projects/markdown/syntax) and many more.
@@ -71,4 +77,5 @@ Search for "github emoji" to find the list :heart:
 
 ```
 LOL ;) This is funny :P
+Search for "github emoji" to find the list :heart:
 ```
