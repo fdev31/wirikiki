@@ -5,7 +5,8 @@
       <bar-button caption="Search" @click="searchMode()" />
       <bar-button v-if="editorMode()" caption="Save" @click="toggleEditor()" />
       <bar-button v-else caption="Edit" @click="toggleEditor()" />
-      <bar-button caption="Delete" @click="deletePage()" />
+      <bar-button v-if="editorMode()" caption="Cancel" @click="cancelEdit()" />
+      <bar-button v-else caption="Delete" @click="deletePage()" />
       <bar-button caption="Color" @click="toggleDark()" />
       <bar-button caption="Help" @click="showHelp()" />
     </span>

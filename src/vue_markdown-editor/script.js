@@ -35,7 +35,8 @@ export default {
     },
   },
   methods: {
-    toggleEditor() {
+    toggleEditor(options) {
+      const opts = { save: true, ...options };
       this.editorMode = !this.editorMode;
       if (this.editorMode) {
         this.$originalContent = this.markdownText;
@@ -48,8 +49,12 @@ export default {
       } else {
         this.markdownText = simplemde.value();
         simplemde.toTextArea();
-        if (this.$originalContent != this.markdownText) {
-          this.$emit("docChanged");
+        if (opts.save) {
+          if (this.$originalContent != this.markdownText) {
+            this.$emit("docChanged");
+          }
+        } else {
+          this.markdownText = this.$originalContent;
         }
       }
     },

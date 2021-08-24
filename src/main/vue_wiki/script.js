@@ -130,6 +130,9 @@ export default {
       this.$refs.editor.markdownText = page.content;
       this.pageIndex = parseInt(idx);
     },
+    cancelEdit() {
+      this.$refs.editor.toggleEditor({ save: false });
+    },
     toggleEditor() {
       this.$refs.editor.toggleEditor();
     },
