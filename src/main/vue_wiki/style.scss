@@ -31,6 +31,7 @@ h1.toptitle {
   color: vars.$primary-color;
   margin: 0;
   padding: 0 0 0 15px;
+  z-index: 2;
 }
 .toptitle span {
   cursor: pointer;
