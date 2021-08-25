@@ -1,4 +1,5 @@
-<span class="btn" :title="$attrs.caption"
-  ><span class="butlink" v-if="nocaption">{{$attrs.caption}}</span
-  ><img v-if="$attrs.icon" :src="$attrs.icon"
-/></span>
+<span class="btn tooltip">
+  <div class="tooltiptext" v-html="$attrs.caption" />
+  <span class="butlink" v-if="nocaption" v-html="$attrs.caption" />
+  <img v-if="$attrs.icon" :src="$attrs.icon" />
+</span>

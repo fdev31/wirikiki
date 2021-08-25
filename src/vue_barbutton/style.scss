@@ -9,7 +9,7 @@ span.btn {
   border-radius: 20px 20px 3px 3px;
   transition-duration: 150ms;
   font-size: 80%;
-  width: 130px;
+  width: 80px;
   display: inline-block;
   text-align: center;
   opacity: 50%;
@@ -23,9 +23,42 @@ span.btn img {
 span.btn:hover {
   opacity: 100%;
   transition-duration: 300ms;
-  box-shadow: 0 6px 3px -4px vars.$front-color;
 }
-.dark span.btn:hover {
+
+/* TOOLTIPS: */
+.tooltip {
+  position: relative;
+  display: inline-block;
+  border-bottom: 1px dotted black;
+}
+
+.tooltip .tooltiptext {
+  margin-top: 30px;
+  margin-left: -40px;
+  visibility: hidden;
+  width: 120px;
+  background-color: darken(vars.$background-color, 10%);
+  color: vars.$front-color;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px 0;
+
+  /* Position the tooltip */
+  position: absolute;
+  z-index: 1;
+  opacity: 0%;
   transition-duration: 300ms;
-  box-shadow: 0 6px 3px -4px vars.$front-color-dark;
+}
+
+.dark .tooltip .tooltiptext {
+  background-color: darken(vars.$background-color-dark, 10%);
+  color: vars.$front-color-dark;
+}
+
+.tooltip:hover .tooltiptext {
+  visibility: visible;
+  opacity: 80%;
+  transition-delay: 1s;
+  transition-duration: 300ms;
+  margin-top: 50px;
 }

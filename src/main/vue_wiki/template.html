@@ -4,12 +4,12 @@
     <span id="barbuttons">
       <bar-button
         icon="img/search.svg"
-        caption="Search"
+        caption="Search</br>[F]"
         @click="searchMode()"
       />
       <bar-button
         icon="img/edit.svg"
-        :caption="editorMode()?'Save':'Edit'"
+        :caption="editorMode()?'Save</br>[Esc]':'Edit</br>[E]'"
         @click="toggleEditor()"
       />
       <bar-button
@@ -21,12 +21,12 @@
       <bar-button
         icon="img/trash.svg"
         v-else
-        caption="Delete"
+        caption="Delete</br>[DEL]"
         @click="deletePage()"
       />
       <bar-button
         icon="img/brightness.svg"
-        :caption="isDark?'Bright':'Dark'"
+        caption="Theme"
         @click="toggleDark()"
       />
       <bar-button icon="img/help.svg" caption="Help" @click="showHelp()" />
