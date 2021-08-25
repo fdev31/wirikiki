@@ -1,6 +1,8 @@
 .PHONY: jsfiles serve clean dev vueapps watch
 DISTFILE=wiki.zip
 
+ARCHIVE=server.py apps require.txt run.sh myKB/Intro.md
+
 jsfiles:
 	sh ./makevueApps.sh
 	./node_modules/.bin/rollup -c rollup.config.js
@@ -31,4 +33,4 @@ dist: vueapps
 	make clean
 	DIST=1 make jsfiles
 	rm -fr apps/*.map
-	zip -9r ${DISTFILE} server.py apps require.txt run.sh myKB/._keep_me
+	zip -9r ${DISTFILE} ${ARCHIVE}
