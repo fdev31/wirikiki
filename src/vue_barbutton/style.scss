@@ -12,7 +12,7 @@ span.btn {
   width: 80px;
   display: inline-block;
   text-align: center;
-  opacity: 50%;
+  opacity: 20%;
 }
 span.btn img {
   vertical-align: bottom;
@@ -21,7 +21,7 @@ span.btn img {
   filter: invert(100%);
 }
 span.btn:hover {
-  opacity: 100%;
+  opacity: 60%;
   transition-duration: 300ms;
 }
 
