@@ -30,6 +30,7 @@ span.btn:hover {
   position: relative;
   display: inline-block;
   border-bottom: 1px dotted black;
+  z-index: 3;
 }
 
 .tooltip .tooltiptext {
@@ -45,7 +46,6 @@ span.btn:hover {
 
   /* Position the tooltip */
   position: absolute;
-  z-index: 1;
   opacity: 0%;
   transition-duration: 300ms;
 }
