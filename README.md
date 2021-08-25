@@ -3,16 +3,17 @@ It's compatible with the most common features supported by GitHub's markdown and
 
 In comparison to [Jupyter](https://jupyter.org/) it lacks the python notes but brings:
 
-- speed / light footprint
-- simplicity of use
-- more advanced markdown support via [markItDown](https://markitdown.netlify.app/) and plugins
-- auto archival (via git)
+- speed / **light** footprint
+- **simplicity** of use
+- **uncluttered** UI supporting both **dark & bright modes**
+- more **advanced markdown support** via [markItDown](https://markitdown.netlify.app/) and plugins and [Marked](https://marked.js.org/) for the editor
+- auto **archival** (using git)
 
 # Installation
 
 ## Building
 
-3 alternatives way to get a runnable code:
+3 alternative ways to get a runnable code:
 
 - download a release (TODO)
 - `make dist`
@@ -26,7 +27,11 @@ DIST=1 ./node_modules/.bin/rollup -c rollup.config.js
 
 # Usage
 
-Just execute `run.sh`, it will automatically install the python virtual environment
+Just execute `run.sh`, it will automatically install the python virtual environment.
+
+## Zero-install mode
+
+You can just open the html file to get a degraded experience, data will not be saved.
 
 ## Keyboard shortcuts
 
@@ -57,3 +62,9 @@ git init
     - uvicorn
 - nodejs and npm (BUILD ONLY)
 - inotify-tools (DEV ONLY)
+
+# Developers note
+
+This is built using
+[Vue.js version 3](https://v3.vuejs.org/) for the front
+and [FastAPI](https://fastapi.tiangolo.com/) for the server side.
