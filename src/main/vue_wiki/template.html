@@ -2,14 +2,34 @@
   <h1 class="toptitle">
     <span @click="toggleSide()">{{pageTitle}}</span>
     <span id="barbuttons">
-      <bar-button caption="Search" @click="searchMode()" />
-      <bar-button v-if="editorMode()" caption="Save" @click="toggleEditor()" />
-      <bar-button v-else caption="Edit" @click="toggleEditor()" />
-      <bar-button v-if="editorMode()" caption="Cancel" @click="cancelEdit()" />
-      <bar-button v-else caption="Delete" @click="deletePage()" />
-      <bar-button v-if="isDark" caption="Bright" @click="toggleDark()" />
-      <bar-button v-else caption="Dark" @click="toggleDark()" />
-      <bar-button caption="Help" @click="showHelp()" />
+      <bar-button
+        icon="img/search.svg"
+        caption="Search"
+        @click="searchMode()"
+      />
+      <bar-button
+        icon="img/edit.svg"
+        :caption="editorMode()?'Save':'Edit'"
+        @click="toggleEditor()"
+      />
+      <bar-button
+        icon="img/forget.svg"
+        v-if="editorMode()"
+        caption="Cancel"
+        @click="cancelEdit()"
+      />
+      <bar-button
+        icon="img/trash.svg"
+        v-else
+        caption="Delete"
+        @click="deletePage()"
+      />
+      <bar-button
+        icon="img/brightness.svg"
+        :caption="isDark?'Bright':'Dark'"
+        @click="toggleDark()"
+      />
+      <bar-button icon="img/help.svg" caption="Help" @click="showHelp()" />
     </span>
   </h1>
 </div>

@@ -1,1 +1,4 @@
-<span class="btn"><span class="butlink">{{caption}}</span></span>
+<span class="btn" :title="$attrs.caption"
+  ><span class="butlink" v-if="nocaption">{{$attrs.caption}}</span
+  ><img v-if="$attrs.icon" :src="$attrs.icon"
+/></span>
