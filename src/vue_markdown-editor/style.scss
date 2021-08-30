@@ -14,7 +14,7 @@ div.CodeMirror {
 }
 
 .dark div.CodeMirror {
-  background-color: vars.$background-color-dark;
+  background-color: lighten(vars.$background-color-dark, 10%);
   color: vars.$front-color-dark;
 }
 
