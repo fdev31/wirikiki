@@ -10,8 +10,13 @@ const getOptions = (obj) => {
 };
 
 export default {
+  emits: ["addedImage"],
   mounted() {
-    var myDropzone = new Dropzone("form#upload-zone", { url: "/upload" });
+    const myDropzone = new Dropzone("form#upload-zone", { url: "/upload" });
+    const vu = this;
+    myDropzone.on("addedfile", (file) => {
+      vu.$emit("addedImage", file);
+    });
   },
   data() {
     return {

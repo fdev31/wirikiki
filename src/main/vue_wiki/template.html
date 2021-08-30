@@ -47,4 +47,4 @@
 <div id="main" @click="$refs.editor.editorMode || toggleEditor()">
   <markdown-editor ref="editor" @docChanged="savePage"></markdown-editor>
 </div>
-<modals ref="modals"></modals>
+<modals ref="modals" @addedImage="imageAdded"></modals>

@@ -15,6 +15,9 @@ export default {
     this.toggleDark();
   },
   methods: {
+    imageAdded(file) {
+      this.$refs.editor.replaceSelection(`![img](images/${file.name})\n`);
+    },
     editorMode() {
       if (this.$refs.editor) return this.$refs.editor.editorMode;
       return false;
