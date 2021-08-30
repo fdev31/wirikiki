@@ -11,7 +11,8 @@ import replace from "@rollup/plugin-replace";
 
 const globals = {
   markdownit: "markdownit",
-    SimpleMDE: 'SimpleMDE',
+  Dropzone: "Dropzone",
+  SimpleMDE: "SimpleMDE",
 };
 
 const dev_packages = process.env["DIST"]
