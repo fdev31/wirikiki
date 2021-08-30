@@ -7,7 +7,7 @@ from typing import List
 import asyncio
 import aiofiles
 
-from fastapi import FastAPI
+from fastapi import FastAPI, UploadFile, File
 from fastapi.staticfiles import StaticFiles
 from starlette.responses import RedirectResponse
 from fastapi.responses import ORJSONResponse
@@ -24,6 +24,7 @@ PATH = os.environ.get("DBDIR", "./myKB/")
 if not PATH.endswith(os.path.sep):
     PATH += os.path.sep
 
+IMAGE_PATH = os.path.join(PATH, "images")
 USE_GIT = os.path.exists(os.path.join(PATH, ".git"))
 
 
@@ -86,6 +87,13 @@ def index():
     return RedirectResponse(url="/index.html")
 
 
+@app.post("/upload")
+async def upload(file: UploadFile = File(...)):
+    fullname = os.path.join(IMAGE_PATH, file.filename)
+    async with aiofiles.open(fullname, "wb") as f:
+        await f.write(await file.read())
+
+
 @app.delete("/notebook")
 async def deleteNote(name: str):
     """Remove one note"""
@@ -120,6 +128,7 @@ async def getNotes() -> List[Note]:
     return entries
 
 
+app.mount("/images/", StaticFiles(directory=IMAGE_PATH), name="images")
 app.mount("/", StaticFiles(directory="apps"), name="static")
 
 if USE_GIT:

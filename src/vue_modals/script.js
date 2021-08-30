@@ -10,6 +10,9 @@ const getOptions = (obj) => {
 };
 
 export default {
+  mounted() {
+    var myDropzone = new Dropzone("form#upload-zone", { url: "/upload" });
+  },
   data() {
     return {
       itemName: "",
@@ -53,9 +56,13 @@ export default {
         });
       }
     },
+    showUploadForm() {
+      this.currentModal = "modal-upload";
+      MicroModal.show(this.currentModal, getOptions(this));
+    },
     showHelp() {
       this.currentModal = "modal-help";
-      MicroModal.show("modal-help", getOptions(this));
+      MicroModal.show(this.currentModal, getOptions(this));
     },
   },
 };
