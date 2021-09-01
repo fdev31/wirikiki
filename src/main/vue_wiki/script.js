@@ -13,6 +13,14 @@ const pagesByName = new Map();
 export default {
   mounted() {
     this.toggleDark();
+    document.addEventListener("scroll", (evt) => {
+      this.scrolled = window.scrollY > 36;
+    });
+  },
+  computed: {
+    titleClass() {
+      return this.scrolled ? "toptitle scrolled" : "toptitle";
+    },
   },
   methods: {
     imageAdded(file) {
@@ -192,6 +200,7 @@ export default {
     return {
       isDark: true,
       _matching: new Set(),
+      scrolled: false,
       pages: [],
       sidebarHidden: false,
       pageTitle: "Wiki",
