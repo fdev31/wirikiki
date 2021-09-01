@@ -1,5 +1,12 @@
 @use 'variables' as vars;
 
+div#editor.rendering {
+  padding: 0 1em;
+}
+div#editor.editing {
+  padding: 0;
+}
+
 .editor-preview-side {
   background-color: lighten(vars.$background-color, vars.$shade-delta);
 }

@@ -61,6 +61,9 @@ export default {
     };
   },
   computed: {
+    editorClass() {
+      return this.editorMode ? "editing" : "rendering";
+    },
     markdownRender() {
       let source = plugins.prerender.reduce(
         (text, handler) => handler(text),
