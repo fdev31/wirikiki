@@ -1,0 +1,25 @@
+#!/bin/env python
+import sys
+import time
+import threading
+from setproctitle import setproctitle
+setproctitle(sys.argv[0])
+try:
+    import native_web_app as webbrowser
+except ImportError:
+    import webbrowser
+
+import uvicorn
+
+PORT=8000
+HOST="127.0.0.1"
+
+
+class WebClient(threading.Thread):
+    def run(self):
+        time.sleep(1)
+        webbrowser.open(f"http://{HOST}:{PORT}")
+
+if __name__ == "__main__":
+    t = WebClient().start()
+    uvicorn.run("server:app", host=HOST, port=PORT, log_level="warning")

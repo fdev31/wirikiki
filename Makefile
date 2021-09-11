@@ -1,7 +1,9 @@
 .PHONY: jsfiles serve clean dev vueapps watch
 DISTFILE=wiki.zip
 
-ARCHIVE=server.py apps require.txt run.sh myKB/Intro.md
+ARCHIVE=server/__init__.py apps require.txt run.sh myKB/Intro.md scripts/wirikiki setup.py
+
+all: jsfiles venv
 
 jsfiles:
 	sh ./makevueApps.sh
@@ -27,7 +29,7 @@ serve: venv
 
 venv:
 	python -m venv venv
-	./venv/bin/pip install -r require.txt
+	./venv/bin/python setup.py install
 
 dist: vueapps
 	make clean

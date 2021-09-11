@@ -2,3 +2,5 @@ aiofiles
 fastapi
 uvicorn
 python-multipart
+native_web_app
+setproctitle
