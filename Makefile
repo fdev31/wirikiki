@@ -9,6 +9,10 @@ jsfiles:
 	sh ./makevueApps.sh
 	./node_modules/.bin/rollup -c rollup.config.js
 
+freeze:
+	./venv/bin/pip install pyinstaller
+	./venv/bin/pyinstaller scripts/wirikiki --add-data apps:apps --add-data myKB/Intro.md:myKB/Intro.md --add-data myKB/images/.keep_me:myKB/images/.keep_me -w -p . --collect-submodules server -F
+
 watch:
 	./node_modules/.bin/rollup -c rollup.config.js -w
 
@@ -21,6 +25,7 @@ dev:
 clean:
 	rm -fr apps/*.js apps/*.css apps/*.map
 	rm -fr venv
+	rm -fr dist
 	rm -fr src/*/*.vue
 	rm -fr ${DISTFILE}
 
