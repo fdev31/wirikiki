@@ -1,25 +1,26 @@
 #!/bin/env python
-import sys
-import time
-import threading
-from setproctitle import setproctitle
-setproctitle(sys.argv[0])
-try:
-    import native_web_app as webbrowser
-except ImportError:
-    import webbrowser
-
-import uvicorn
 
 PORT=8000
 HOST="127.0.0.1"
 
 
-class WebClient(threading.Thread):
-    def run(self):
-        time.sleep(1)
-        webbrowser.open(f"http://{HOST}:{PORT}")
+import os
 
-if __name__ == "__main__":
-    t = WebClient().start()
+pid = os.fork()
+
+if pid > 0: # main process, launch browser
+    import time
+    try:
+        import native_web_app as webbrowser
+    except ImportError:
+        import webbrowser
+
+    time.sleep(1)
+    webbrowser.open(f"http://{HOST}:{PORT}")
+else: # daemon (children) process
+    import sys
+    import uvicorn
+    from setproctitle import setproctitle
+    setproctitle(sys.argv[0])
+    os.setsid() # detach
     uvicorn.run("server:app", host=HOST, port=PORT, log_level="warning")
