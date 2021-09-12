@@ -21,10 +21,17 @@ else:
 
 PATH = os.environ.get("DBDIR", "./myKB/")
 
+if not os.path.exists(PATH):
+    PATH = os.path.curdir
+
 if not PATH.endswith(os.path.sep):
     PATH += os.path.sep
 
 IMAGE_PATH = os.path.join(PATH, "images")
+
+if not os.path.exists(IMAGE_PATH):
+    os.mkdir(IMAGE_PATH)
+
 USE_GIT = os.path.exists(os.path.join(PATH, ".git"))
 
 
