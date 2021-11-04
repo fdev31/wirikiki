@@ -114,9 +114,8 @@ export default {
         "Create",
         { hasInput: true },
         async (name) => {
-          console.log("NEW", name);
           if (!name) return;
-          const content = "# To be written";
+          const content = `# ${name}`;
           let success = false;
           try {
             await fetch("/notebook", {
