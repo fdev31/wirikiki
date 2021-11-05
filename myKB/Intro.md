@@ -79,3 +79,22 @@ Search for "github emoji" to find the list :heart:
 LOL ;) This is funny :P
 Search for "github emoji" to find the list :heart:
 ```
+
+### Calendar
+
+
+#calendar(
+2/11/2021 13:30-15:30 Test appointment
+@yearly 18/8/1982  8:00-18:00 Birthday John
+    @weekly 4/11/2021 8:00-18:00  Swimming pool
+)
+
+**DO NOT put a space after the initial "#" while using this feature:**
+
+```
+# calendar(
+2/11/2021 13:30-15:30 Test appointment
+@yearly 18/8/1982  8:00-18:00 Birthday John
+@weekly 4/11/2021 8:00-18:00  Swimming pool
+)
+```

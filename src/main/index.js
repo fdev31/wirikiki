@@ -21,6 +21,7 @@ const keyHandlers = {
   Escape() {
     if (vue.$refs.editor.editorMode) {
       vue.toggleEditor();
+      setTimeout(initCalendar, 10);
     } else {
       vue.toggleSide();
     }
@@ -67,14 +68,74 @@ export function openlink(text) {
   vue.openPageByName(link);
 }
 
+function resetState() {
+  scheduler.clearAll();
+  schedules.length = 0;
+}
+
+let dates = [];
+let schedules = [];
+
+function initCalendar() {
+  resetState();
+  scheduler.config.readonly = true;
+  scheduler.config.include_end_by = true;
+  scheduler.config.first_hour = 5;
+  scheduler.config.last_hour = 23;
+  scheduler.init("scheduler_here", new Date(), "week");
+  const eu_re = /^\s*(\d+)[/](\d+)[/](\d+)\s+(\d+):(\d+)-(\d+):(\d+)\s(.*)/;
+  const eu_recurring_re =
+    /@([a-z]+)\s+(\d+)[/](\d+)[/](\d+)\s+(\d+):(\d+)-(\d+):(\d+)\s(.*)/;
+  for (const i in dates) {
+    const date = dates[i];
+    let splitInfo = date.match(eu_re);
+    if (splitInfo) {
+      const [_, day, month, year, s_hour, s_min, e_hour, e_min, descr] =
+        splitInfo;
+      schedules.push({
+        id: i,
+        start_date: `${year}-${month}-${day} ${s_hour}:${s_min}`,
+        end_date: `${year}-${month}-${day} ${e_hour}:${e_min}`,
+        text: descr,
+      });
+      continue;
+    }
+    splitInfo = date.match(eu_recurring_re);
+    if (splitInfo) {
+      const [_, mode, day, month, year, s_hour, s_min, e_hour, e_min, descr] =
+        splitInfo;
+      const o = {
+        id: i,
+        start_date: `${year}-${month}-${day} ${s_hour}:${s_min}`,
+        end_date: `9999-${month}-${day} ${e_hour}:${e_min}`,
+        event_pid: 0,
+        text: descr,
+      };
+      if (mode === "weekly") {
+        o.rec_type = "week_1___4#no";
+        o.rec_pattern = "week_1___4";
+        o.event_length = 36000;
+      } else if (mode === "yearly") {
+        o.rec_type = "year_1___#no";
+        o.rec_pattern = "year_1___1";
+        o.event_length = 36000;
+      }
+      schedules.push(o);
+      continue;
+    }
+  }
+  scheduler.parse(schedules);
+}
+
 function initInternalLinks() {
   // converts intern refs to "openlink" calls
-  markdownEditor.addPlugin("postrender", (text) =>
-    text.replace(
+  markdownEditor.addPlugin("postrender", (text) => {
+    setTimeout(initCalendar, 10);
+    return text.replace(
       /<a href=":([^"]+)/g,
       (...args) => `<a href="#" onclick="app.openlink('${args[1]}')`
-    )
-  );
+    );
+  });
   markdownEditor.addPlugin("prerender", (text) =>
     text.replace(/(.\s*)\[\[([^\]]+)\]\]/g, (match, prefix, text) => {
       if (match[0] == "\\") {
@@ -82,6 +143,25 @@ function initInternalLinks() {
       } else {
         return `${prefix}[${text}](:${encodeURIComponent(text)})`;
       }
+    })
+  );
+  // convert calendar markup to html / js
+  markdownEditor.addPlugin("prerender", (text) =>
+    text.replace(/#calendar[\s\S]*?^\)/gm, (match, prefix, text) => {
+      dates = match.split("\n").slice(1, -1);
+      return `<div id="scheduler_here" class="dhx_cal_container" style="width:100%; height:100vh;" onclick="event.stopPropagation()">
+	<div class="dhx_cal_navline">
+		<div class="dhx_cal_prev_button">&nbsp;</div>
+		<div class="dhx_cal_next_button">&nbsp;</div>
+		<div class="dhx_cal_today_button"></div>
+		<div class="dhx_cal_date"></div>
+		<div class="dhx_cal_tab" name="day_tab"></div>
+		<div class="dhx_cal_tab" name="week_tab"></div>
+		<div class="dhx_cal_tab" name="month_tab"></div>
+	</div>
+	<div class="dhx_cal_header"></div>
+	<div class="dhx_cal_data"></div>
+</div>`;
     })
   );
 }
