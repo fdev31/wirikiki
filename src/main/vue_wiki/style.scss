@@ -85,18 +85,6 @@ h1.toptitle.scrolled {
 #main.dark {
   background-color: lighten(vars.$background-color-dark, vars.$shade-delta);
 }
-#main:hover {
-  background-color: darken(
-    vars.$background-color,
-    math.div(vars.$shade-delta, 3)
-  );
-}
-#main.dark:hover {
-  background-color: lighten(
-    vars.$background-color-dark,
-    math.div(vars.$shade-delta, 2)
-  );
-}
 .pageTab {
   cursor: pointer;
   width: 100%;

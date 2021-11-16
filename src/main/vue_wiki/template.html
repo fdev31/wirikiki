@@ -44,7 +44,7 @@
   </div>
   <div v-on:click="newPage()" class="pageTab"><b>+ Add new</b></div>
 </div>
-<div id="main" @click="$refs.editor.editorMode || toggleEditor()">
+<div id="main">
   <markdown-editor ref="editor" @docChanged="savePage"></markdown-editor>
 </div>
 <modals ref="modals" @addedImage="imageAdded"></modals>
