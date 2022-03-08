@@ -23,6 +23,8 @@ vueapps: dev
 	./makevueApps.sh
 
 dev:
+	npm i '@vue/compiler-sfc'
+	npm i @babel/preset-env
 	npm install
 
 clean:
