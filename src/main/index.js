@@ -177,7 +177,7 @@ export function init() {
   vu.component("modals", modals);
   vue = vu.mount("#app");
 
-  fetch("/notebooks").then((req) => {
+  fetch("notebooks").then((req) => {
     req.json().then(vue.setContent);
   });
 

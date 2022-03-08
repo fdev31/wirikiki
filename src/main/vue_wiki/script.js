@@ -1,7 +1,7 @@
 import { gE } from "../lib/utils";
 
 async function saveDoc(docId, content) {
-  let req = await fetch("/notebook", {
+  let req = await fetch("notebook", {
     method: "PUT",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ name: docId, content }),
@@ -74,7 +74,7 @@ export default {
         async () => {
           let success = false;
           try {
-            await fetch(`/notebook?name=${this.pageTitle}`, {
+            await fetch(`notebook?name=${this.pageTitle}`, {
               method: "DELETE",
             });
             success = true;
@@ -118,7 +118,7 @@ export default {
           const content = `# ${name}`;
           let success = false;
           try {
-            await fetch("/notebook", {
+            await fetch("notebook", {
               method: "POST",
               headers: { "Content-Type": "application/json" },
               body: JSON.stringify({ name, content }),
