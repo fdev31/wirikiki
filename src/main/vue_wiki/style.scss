@@ -59,6 +59,9 @@ h1.toptitle.scrolled {
   margin: 0;
   padding: 0 1ex 0 0;
   width: 220px;
+  overflow-y: auto;
+  overflow-x: clip;
+  max-height: calc(100% - #{$top-bar-height});
 }
 #sidebar.folded {
   margin-left: -250px;
