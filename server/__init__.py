@@ -80,19 +80,18 @@ class Note(BaseModel):
             n.content = await f.read()
         return n
 
-    async def save(self):
-        wasExisting = self.exists
-        if not wasExisting and ALLOW_FOLDERS:
+    async def save(self, creation=False):
+        if creation and ALLOW_FOLDERS:
             rootDir = os.path.dirname(self.filename)
             if not os.path.exists(rootDir):
                 os.makedirs(rootDir, exist_ok=True)
         async with aiofiles.open(self.filename, "w", encoding="utf-8") as f:
             await f.write(self.content)
-        if not wasExisting:
+        if creation:
             await gitAdd(self.name)
         await gitSave(
             self.name,
-            f"Udated {self.name}" if wasExisting else f"NEW note: {self.name}",
+            f"Udated {self.name}" if not creation else f"NEW note: {self.name}",
         )
 
 
@@ -118,9 +117,9 @@ async def deleteNote(name: str):
 @app.post("/notebook")
 async def addNote(note: Note):
     """Create one note"""
-    assert not os.path.exists(note.filename)
     assert "." not in note.filename
-    await note.save()
+    assert not os.path.exists(note.filename)
+    await note.save(creation=True)
 
 
 @app.put("/notebook")
