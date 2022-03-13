@@ -119,6 +119,7 @@ async def deleteNote(name: str):
 async def addNote(note: Note):
     """Create one note"""
     assert not os.path.exists(note.filename)
+    assert "." not in note.filename
     await note.save()
 
 
