@@ -1,5 +1,8 @@
 from __future__ import annotations
 
+ALLOW_FOLDERS = True
+DEFAULT_DBDIR = "./myKB/"
+
 import os
 from pydantic import BaseModel
 from typing import List
@@ -19,7 +22,7 @@ except ImportError:
 else:
     app = FastAPI(debug=True, default_response_class=ORJSONResponse)
 
-PATH = os.environ.get("DBDIR", "./myKB/")
+PATH = os.environ.get("DBDIR", DEFAULT_DBDIR)
 
 if not os.path.exists(PATH):
     PATH = os.path.curdir
@@ -79,6 +82,10 @@ class Note(BaseModel):
 
     async def save(self):
         wasExisting = self.exists
+        if not wasExisting and ALLOW_FOLDERS:
+            rootDir = os.path.dirname(self.filename)
+            if not os.path.exists(rootDir):
+                os.makedirs(rootDir, exist_ok=True)
         async with aiofiles.open(self.filename, "w", encoding="utf-8") as f:
             await f.write(self.content)
         if not wasExisting:
