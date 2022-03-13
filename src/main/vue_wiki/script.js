@@ -125,7 +125,6 @@ export default {
             });
             success = 200 == req.status;
           } catch (err) {
-            alert("Error happened");
             console.error(err);
           }
           if (success) {
@@ -133,6 +132,8 @@ export default {
             this.pages.push({ name, content });
             pagesByName.set(name, idx);
             this.openPage(idx);
+          } else {
+            alert("Error happened");
           }
         }
       );
