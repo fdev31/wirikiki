@@ -118,12 +118,12 @@ export default {
           const content = `# ${name}`;
           let success = false;
           try {
-            await fetch("notebook", {
+            let req = await fetch("notebook", {
               method: "POST",
               headers: { "Content-Type": "application/json" },
               body: JSON.stringify({ name, content }),
             });
-            success = true;
+            success = 200 == req.status;
           } catch (err) {
             alert("Error happened");
             console.error(err);
