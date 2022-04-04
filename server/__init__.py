@@ -117,7 +117,7 @@ async def deleteNote(name: str):
 @app.post("/notebook")
 async def addNote(note: Note):
     """Create one note"""
-    assert "." not in note.filename
+    assert "." not in note.name
     assert not os.path.exists(note.filename)
     await note.save(creation=True)
 
