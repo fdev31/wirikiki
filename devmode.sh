@@ -1,6 +1,6 @@
 #!/bin/sh
-SOUND="/usr/share/sounds/gnome/default/alerts/glass.ogg"
-SOUND_KO="/usr/share/sounds/gnome/default/alerts/bark.ogg"
+SOUND="/usr/share/sounds/freedesktop/stereo/complete.oga"
+SOUND_KO="/usr/share/sounds/freedesktop/stereo/dialog-warning.oga"
 
 make vueapps
 echo "BUILT"
