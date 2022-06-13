@@ -7,6 +7,8 @@ else
 fi
 if which chrome 2>&1 > /dev/null ; then
     CHROME=chrome
+elif which google-chrome-stable 2>&1 > /dev/null ; then
+    CHROME=google-chrome-stable
 else
     CHROME=chromium
 fi
