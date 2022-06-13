@@ -12,3 +12,18 @@ export function debounce(fn, delay) {
     }, delay);
   };
 }
+
+export function getTokenHeader() {
+  let accessToken = null;
+  try {
+    for (const i in document.cookie.split(";")) {
+      const c = document.cookie.split(";")[i].trim();
+      if (c.startsWith("accessToken=")) {
+        accessToken = c.split("=")[1];
+      }
+    }
+  } catch (e) {
+    console.log("No token found");
+  }
+  return { Authorization: "Bearer " + accessToken };
+}

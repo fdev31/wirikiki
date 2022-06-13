@@ -1,9 +1,12 @@
-import { gE } from "../lib/utils";
+import { gE, getTokenHeader } from "../lib/utils";
 
 async function saveDoc(docId, content) {
   let req = await fetch("notebook", {
     method: "PUT",
-    headers: { "Content-Type": "application/json" },
+    headers: Object.assign(
+      { "Content-Type": "application/json" },
+      getTokenHeader()
+    ),
     body: JSON.stringify({ name: docId, content }),
   });
 }
@@ -75,6 +78,7 @@ export default {
           let success = false;
           try {
             await fetch(`notebook?name=${this.pageTitle}`, {
+              headers: getTokenHeader(),
               method: "DELETE",
             });
             success = true;
@@ -120,7 +124,10 @@ export default {
           try {
             let req = await fetch("notebook", {
               method: "POST",
-              headers: { "Content-Type": "application/json" },
+              headers: Object.assign(
+                { "Content-Type": "application/json" },
+                getTokenHeader()
+              ),
               body: JSON.stringify({ name, content }),
             });
             success = 200 == req.status;

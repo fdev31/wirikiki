@@ -1,4 +1,4 @@
-import { debounce } from "../lib/utils";
+import { debounce, getTokenHeader } from "../lib/utils";
 import { createApp } from "vue";
 import wiki from "./wiki.vue";
 import barbutton from "../barbutton.vue";
@@ -177,8 +177,24 @@ export function init() {
   vu.component("modals", modals);
   vue = vu.mount("#app");
 
-  fetch("notebooks").then((req) => {
-    req.json().then(vue.setContent);
+  fetch("notebooks", { headers: getTokenHeader() }).then((req) => {
+    if (req.status == 401) {
+      let p = new URLSearchParams();
+      p.set("username", prompt("User name"));
+      p.set("password", prompt("Password"));
+      // get the token
+      fetch("/token", {
+        method: "POST",
+        body: p,
+      }).then((req) => {
+        req.json().then((data) => {
+          document.cookie = "accessToken=" + data.access_token;
+          document.location.href = document.location.href;
+        });
+      });
+    } else {
+      req.json().then(vue.setContent);
+    }
   });
 
   const globalTags = ["BODY", "TEXTAREA"];
