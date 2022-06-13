@@ -53,24 +53,19 @@ from jose import JWTError, jwt  # type: ignore
 
 
 def create_access_token(data: dict, expires_delta: Optional[timedelta] = None):
-    to_encode = data.copy()
+    data_copy = data.copy()
     if expires_delta:
         expire = datetime.utcnow() + expires_delta
     else:
         expire = datetime.utcnow() + timedelta(
             minutes=Settings.ACCESS_TOKEN_EXPIRE_MINUTES
         )
-    to_encode.update({"exp": expire})
-    encoded_jwt = jwt.encode(
-        to_encode, Settings.SECRET_KEY, algorithm=Settings.ALGORITHM
-    )
-    return encoded_jwt
+    data_copy.update({"exp": expire})
+    return jwt.encode(data_copy, Settings.SECRET_KEY, algorithm=Settings.ALGORITHM)
 
 
-def get_db():
-    return {
-        "fab": "pass",
-    }
+def get_user_db():
+    return {"fab": "pass", "john": "123"}
 
 
 class Token(BaseModel):
@@ -86,7 +81,7 @@ credentials_exception = HTTPException(
 
 @app.post("/token", response_model=Token)
 def login_for_access_token(
-    form_data: OAuth2PasswordRequestForm = Depends(), db: dict = Depends(get_db)
+    form_data: OAuth2PasswordRequestForm = Depends(), db: dict = Depends(get_user_db)
 ):
     if db.get(form_data.username) == form_data.password:
         access_token_expires = timedelta(minutes=Settings.ACCESS_TOKEN_EXPIRE_MINUTES)
@@ -102,14 +97,13 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/token")
 
 
 def get_current_user_from_token(
-    token: str = Depends(oauth2_scheme), db: dict = Depends(get_db)
+    token: str = Depends(oauth2_scheme), db: dict = Depends(get_user_db)
 ):
     try:
         payload = jwt.decode(
             token, Settings.SECRET_KEY, algorithms=[Settings.ALGORITHM]
         )
         username: str = payload.get("sub")
-        print("username/email extracted is ", username)
         if username is None:
             raise credentials_exception
     except JWTError:
@@ -126,8 +120,7 @@ def get_current_user_from_token(
 async def _gitCmd(*args):
     if not USE_GIT:
         return
-    cmd_args = ["git", f"--git-dir={PATH}.git", f"--work-tree={PATH}"]
-    cmd_args.extend(args)
+    cmd_args = ["git", f"--git-dir={PATH}.git", f"--work-tree={PATH}"] + args
     proc = await asyncio.create_subprocess_exec(*cmd_args)
     await proc.communicate()
 
