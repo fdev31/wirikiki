@@ -62,7 +62,7 @@ def create_access_token(data: dict, expires_delta: Optional[timedelta] = None):
 
 
 def get_user_db():
-    return {"fab": "pass", "john": "123"}
+    return cfg["users"]
 
 
 class Token(BaseModel):

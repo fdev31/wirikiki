@@ -6,3 +6,7 @@ expire_minutes = 1440
 
 [database]
 directory = "./myKB"
+
+[users]
+fab = "pass"
+john = "123"
