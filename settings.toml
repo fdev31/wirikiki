@@ -6,6 +6,7 @@ expire_minutes = 1440
 
 [database]
 directory = "./myKB"
+# TODO: add: git to replace "USE_GIT"
 
 [users]
 fab = "pass"
