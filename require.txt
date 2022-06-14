@@ -1,5 +1,5 @@
 python-jose
-toml
+tomli
 aiofiles
 orjson
 fastapi

@@ -15,7 +15,7 @@ from fastapi.staticfiles import StaticFiles
 from starlette.responses import RedirectResponse
 from fastapi.responses import ORJSONResponse
 
-import toml.decoder
+import tomli
 
 try:
     import orjson
@@ -25,7 +25,7 @@ else:
     app = FastAPI(debug=True, default_response_class=ORJSONResponse)
 
 CFG_FILE = os.environ.get("CFG_FILE", os.path.join(os.path.curdir, "settings.toml"))
-cfg: Dict[str, Dict[str, Any]] = toml.decoder.load(open(CFG_FILE))
+cfg: Dict[str, Dict[str, Any]] = tomli.load(open(CFG_FILE, "rb"))
 PATH = os.environ.get("DBDIR", cfg["database"]["directory"])
 
 if not os.path.exists(PATH):
