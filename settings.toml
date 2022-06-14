@@ -1,8 +1,11 @@
+# Override the settings file path using (in bash)
+# export CFG_FILE=/path/to/config.toml
+
 [token]
 algorithm = "HS256"
 key = "kHi37vNk93Dd1LgieCGk+d1axrrQYJ6bM4OEqtu78HA="
 # in minutes: 10 days
-expire_minutes = 1440
+expire_minutes = 14400
 
 [database]
 directory = "./myKB"
