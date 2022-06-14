@@ -179,30 +179,29 @@ export function init() {
 
   fetch("notebooks", { headers: getTokenHeader() }).then((req) => {
     if (req.status == 401) {
-      let p = new URLSearchParams();
-      p.set("username", prompt("User name"));
-      p.set("password", prompt("Password"));
-      // get the token
-      fetch("/token", {
-        method: "POST",
-        body: p,
-      }).then((req) => {
-        req.json().then((data) => {
-          document.cookie = "accessToken=" + data.access_token;
-          document.location.href = document.location.href;
+      setTimeout(async () => {
+        let p = new URLSearchParams();
+        p.set("username", prompt("User name"));
+        p.set("password", prompt("Password"));
+        let req = await fetch("/token", {
+          method: "POST",
+          body: p,
         });
-      });
+        let data = await req.json();
+        document.cookie = "accessToken=" + data.access_token;
+        document.location.href = document.location.href;
+      }, 1000);
     } else {
       req.json().then(vue.setContent);
     }
   });
-
-  const globalTags = ["BODY", "TEXTAREA"];
-  // install global key handlers
-  document.onkeyup = function (evt) {
-    if (globalTags.indexOf(evt.target.tagName) == -1) return;
-    if (vue.$refs.modals.active()) return;
-    const name = (evt || window.event).key;
-    if (keyHandlers[name]) keyHandlers[name]();
-  };
 }
+
+const globalTags = ["BODY", "TEXTAREA"];
+// install global key handlers
+document.onkeyup = function (evt) {
+  if (globalTags.indexOf(evt.target.tagName) == -1) return;
+  if (vue.$refs.modals.active()) return;
+  const name = (evt || window.event).key;
+  if (keyHandlers[name]) keyHandlers[name]();
+};
