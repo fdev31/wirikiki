@@ -97,7 +97,7 @@ def get_current_user_from_token(
 ):
     try:
         payload = jwt.decode(
-            token, cfg["token"]["key"], algorithms=[cfg["token"]["ALGORITHM"]]
+            token, cfg["token"]["key"], algorithms=[cfg["token"]["algorithm"]]
         )
         username: str = payload.get("sub")
         if username is None:
