@@ -4,7 +4,7 @@ ALLOW_FOLDERS = True
 
 import os
 from pydantic import BaseModel
-from typing import List, Optional, Dict, Any, AnyStr
+from typing import List, Optional, Dict, Any
 
 import asyncio
 import aiofiles
