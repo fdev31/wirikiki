@@ -2,7 +2,7 @@
 DISTFILE=wiki.zip
 DIST_DIR:=$(shell python -c "import os; print('wirikiki-' + os.name)")
 
-ARCHIVE=server/__init__.py apps require.txt run.sh myKB/Intro.md myKB/README.md scripts/wirikiki setup.py
+ARCHIVE=server/__init__.py apps require.txt run.sh myKB/anonymous/Intro.md myKB/anonymous/README.md scripts/wirikiki setup.py
 
 all: jsfiles venv
 
