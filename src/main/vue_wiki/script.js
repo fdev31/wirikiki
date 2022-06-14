@@ -111,6 +111,8 @@ export default {
     },
     getTabClasses(name) {
       const c = ["pageTab"];
+      const separators = Array.from(name.matchAll(RegExp("/", "g"))).length;
+      if (separators > 1) c.push("collapsible");
       if (this._matching.has(name)) c.push("matchSearch");
       if (this.pageTitle == name) c.push("opened");
       return c.join(" ");
