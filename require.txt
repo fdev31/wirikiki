@@ -1,5 +1,7 @@
 python-jose
+toml
 aiofiles
+orjson
 fastapi
 uvicorn
 python-multipart

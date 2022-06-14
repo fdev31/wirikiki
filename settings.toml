@@ -1,0 +1,8 @@
+[token]
+algorithm = "HS256"
+key = "kHi37vNk93Dd1LgieCGk+d1axrrQYJ6bM4OEqtu78HA="
+# in minutes 10 days
+expire_minutes = 1440
+
+[database]
+directory = "./myKB"
