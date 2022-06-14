@@ -9,5 +9,6 @@ directory = "./myKB"
 # TODO: add: git to replace "USE_GIT"
 
 [users]
+anonymous = "anonymous"
 fab = "pass"
 john = "123"

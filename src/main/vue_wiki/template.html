@@ -40,11 +40,11 @@
     :class="getTabClasses(page.name)"
     :key="page.name"
   >
-    {{page.name}}
+    {{page.name.replace(new RegExp("[^/]*/"), "")}}
   </div>
   <div v-on:click="newPage()" class="pageTab"><b>+ Add new</b></div>
 </div>
 <div id="main">
   <markdown-editor ref="editor" @docChanged="savePage"></markdown-editor>
 </div>
-<modals ref="modals" @addedImage="imageAdded"></modals>
+<modals ref="modals" @addedImage="imageAdded" @logout="logout"></modals>

@@ -40,7 +40,6 @@ if not os.path.exists(IMAGE_PATH):
 
 USE_GIT = os.path.exists(os.path.join(PATH, ".git"))
 
-
 # AUTHENTICATION
 
 from fastapi.security import OAuth2PasswordRequestForm, OAuth2PasswordBearer
@@ -116,7 +115,8 @@ def get_current_user_from_token(
 async def _gitCmd(*args):
     if not USE_GIT:
         return
-    cmd_args = ["git", f"--git-dir={PATH}.git", f"--work-tree={PATH}"] + args
+    cmd_args = ["git", f"--git-dir={PATH}.git", f"--work-tree={PATH}"]
+    cmd_args.extend(args)
     proc = await asyncio.create_subprocess_exec(*cmd_args)
     await proc.communicate()
 
@@ -198,11 +198,13 @@ async def deleteNote(
 @app.post("/notebook")
 async def addNote(
     note: Note, current_user: dict = Depends(get_current_user_from_token)
-):
+) -> Dict[str, str]:
     """Create one note"""
     assert "." not in note.name
+    note.name = os.path.join(current_user["name"], note.name)
     assert not os.path.exists(note.filename)
     await note.save(creation=True)
+    return dict(name=note.name)
 
 
 @app.put("/notebook")
@@ -220,7 +222,7 @@ async def getNotes(
 ) -> List[Note]:
     """Fetches the notebook"""
     entries = []
-    for root, _dirs, files in os.walk(PATH):
+    for root, _dirs, files in os.walk(os.path.join(PATH, current_user["name"])):
         for file in files:
             if file.endswith(".md"):
                 parent = root[len(PATH) :]

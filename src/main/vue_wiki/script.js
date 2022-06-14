@@ -26,6 +26,10 @@ export default {
     },
   },
   methods: {
+    logout() {
+      document.cookie = "accessToken=";
+      document.location.href = document.location.href;
+    },
     imageAdded(file) {
       this.$refs.editor.replaceSelection(`![img](images/${file.name})\n`);
     },
@@ -131,6 +135,7 @@ export default {
               body: JSON.stringify({ name, content }),
             });
             success = 200 == req.status;
+            name = (await req.json()).name;
           } catch (err) {
             console.error(err);
           }

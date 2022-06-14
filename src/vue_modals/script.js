@@ -30,6 +30,9 @@ export default {
     };
   },
   methods: {
+    logout() {
+      this.$emit("logout");
+    },
     onClose() {
       setTimeout(() => {
         this.currentModal = false;
