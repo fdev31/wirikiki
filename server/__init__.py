@@ -241,6 +241,6 @@ if USE_GIT:
     for root, _dirs, files in os.walk(fullpath):
         for fname in files:
             if fname.endswith(".md"):
-                os.system(f'git add "{fname}"')
+                os.system(f'git add "{root[len(fullpath)+1:]}/{fname}"')
     os.system('git commit -m "Wiki startup"')
     os.chdir(cwd)
