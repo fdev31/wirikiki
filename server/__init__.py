@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 ALLOW_FOLDERS = True
-DEFAULT_DBDIR = "./myKB/"
 
 import os
 from pydantic import BaseModel
