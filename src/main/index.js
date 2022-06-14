@@ -183,7 +183,7 @@ export function init() {
         let p = new URLSearchParams();
         p.set("username", prompt("User name"));
         p.set("password", prompt("Password"));
-        let req = await fetch("/token", {
+        let req = await fetch("token", {
           method: "POST",
           body: p,
         });
