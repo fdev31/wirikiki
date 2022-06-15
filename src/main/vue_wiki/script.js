@@ -47,8 +47,8 @@ export default {
       themeSelectors.forEach((name) => gE(name).classList[action](darkClass));
     },
     setContent(pages) {
-      this.pages = Array.from(pages.values()).sort(
-        (a, b) => a.name.toLowerCase() < b.name.toLowerCase()
+      this.pages = Array.from(pages.values()).sort((a, b) =>
+        a.name.toLowerCase().localeCompare(b.name.toLowerCase())
       );
       for (let i in this.pages) {
         pagesByName.set(this.pages[i].name, i);
