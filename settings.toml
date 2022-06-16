@@ -9,7 +9,7 @@ expire_minutes = 14400
 
 [database]
 directory = "./myKB"
-# TODO: add: git to replace "USE_GIT"
+use_git = true
 
 [users]
 anonymous = "anonymous"

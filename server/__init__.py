@@ -38,8 +38,6 @@ IMAGE_PATH = os.path.join(PATH, "images")
 if not os.path.exists(IMAGE_PATH):
     os.mkdir(IMAGE_PATH)
 
-USE_GIT = os.path.exists(os.path.join(PATH, ".git"))
-
 # AUTHENTICATION
 
 from fastapi.security import OAuth2PasswordRequestForm, OAuth2PasswordBearer
@@ -113,7 +111,7 @@ def get_current_user_from_token(
 
 
 async def _gitCmd(*args):
-    if not USE_GIT:
+    if not cfg["database"]["use_git"]:
         return
     cmd_args = ["git", f"--git-dir={PATH}.git", f"--work-tree={PATH}"]
     cmd_args.extend(args)
@@ -234,7 +232,10 @@ async def getNotes(
 app.mount("/images/", StaticFiles(directory=IMAGE_PATH), name="images")
 app.mount("/", StaticFiles(directory="apps"), name="static")
 
-if USE_GIT:
+if cfg["database"]["use_git"]:
+    if not os.path.exists(os.path.join(PATH, ".git")):
+        _gitCmd("init")
+
     fullpath = os.path.abspath(os.path.expanduser(os.path.expandvars(PATH)))
     cwd = os.getcwd()
     os.chdir(PATH)
