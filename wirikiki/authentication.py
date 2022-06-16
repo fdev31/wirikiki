@@ -30,7 +30,7 @@ def get_user_db():
     if not _user_db:
         for line in open(cfg["users"]["database"], "r", encoding="utf-8"):
             user, password = line.split(" ", 1)
-            _user_db[user] = password
+            _user_db[user] = password.strip()
     return _user_db
 
 
@@ -72,20 +72,20 @@ def make_password(password):
 
 
 def init(application):
+    @application.post("/token", response_model=Token)
     def _login_for_access_token(
         form_data: OAuth2PasswordRequestForm = Depends(),
         db: dict = Depends(get_user_db),
     ):
         is_anonymous = (
-            form_data.username == "anonymous" and cfg["database"]["allow_anonymous"]
+            form_data.username == "anonymous" and cfg["users"]["allow_anonymous"]
         )
-        real_password = db.get(form_data.username)
-        if is_anonymous or real_password == make_password(form_data.password):
+        if is_anonymous or (
+            make_password(form_data.password) == db.get(form_data.username)
+        ):
             access_token = create_access_token(
                 data={"sub": form_data.username},
             )
             return {"access_token": access_token, "token_type": "bearer"}
         else:
             raise credentials_exception
-
-    application.post("/token", response_model=Token)(_login_for_access_token)
