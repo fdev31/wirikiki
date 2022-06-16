@@ -1,4 +1,4 @@
 #!/bin/env python
 import sys
-from server.authentication import make_password
+from wirikiki.authentication import make_password
 print(make_password(sys.argv[1]))

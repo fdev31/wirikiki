@@ -23,4 +23,4 @@ else: # daemon (children) process
     from setproctitle import setproctitle
     setproctitle(sys.argv[0])
     os.setsid() # detach
-    uvicorn.run("server:app", host=HOST, port=PORT, log_level="warning")
+    uvicorn.run("wirikiki:app", host=HOST, port=PORT, log_level="warning")
