@@ -124,6 +124,7 @@ function initCalendar() {
       continue;
     }
   }
+  scheduler.plugins({ recurring: true });
   scheduler.parse(schedules);
 }
 
