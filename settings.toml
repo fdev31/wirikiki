@@ -12,6 +12,6 @@ directory = "./myKB"
 use_git = true
 
 [users]
-anonymous = "anonymous"
-fab = "pass"
-john = "123"
+database = "users.db"
+allow_anonymous = true
+salt = "mySalt"

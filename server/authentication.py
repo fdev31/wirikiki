@@ -1,4 +1,6 @@
-from typing import Optional
+import hashlib
+
+from typing import Optional, Dict
 from fastapi import HTTPException, status, Depends
 from pydantic import BaseModel
 from fastapi.security import OAuth2PasswordRequestForm, OAuth2PasswordBearer
@@ -21,8 +23,15 @@ def create_access_token(data: dict, expires_delta: Optional[timedelta] = None):
     )
 
 
+_user_db: Dict[str, str] = {}
+
+
 def get_user_db():
-    return cfg["users"]
+    if not _user_db:
+        for line in open(cfg["users"]["database"], "r", encoding="utf-8"):
+            user, password = line.split(" ", 1)
+            _user_db[user] = password
+    return _user_db
 
 
 class Token(BaseModel):
@@ -57,12 +66,21 @@ def get_current_user_from_token(
     return dict(name=username)
 
 
+def make_password(password):
+    text = (cfg["users"]["salt"] + password).encode("utf-8")
+    return hashlib.sha512(text).hexdigest()
+
+
 def init(application):
     def _login_for_access_token(
         form_data: OAuth2PasswordRequestForm = Depends(),
         db: dict = Depends(get_user_db),
     ):
-        if db.get(form_data.username) == form_data.password:
+        is_anonymous = (
+            form_data.username == "anonymous" and cfg["database"]["allow_anonymous"]
+        )
+        real_password = db.get(form_data.username)
+        if is_anonymous or real_password == make_password(form_data.password):
             access_token = create_access_token(
                 data={"sub": form_data.username},
             )

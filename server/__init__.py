@@ -11,7 +11,7 @@ from starlette.responses import RedirectResponse
 
 from .models import Note
 from .configuration import cfg, PATH, IMAGE_PATH
-from .versionning import gitRun, gitAdd, gitRemove, gitSave
+from .versionning import gitRun, gitRemove, gitSave
 from .authentication import get_current_user_from_token, init as auth_init
 
 try:
