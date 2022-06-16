@@ -45,7 +45,7 @@ credentials_exception = HTTPException(
 )
 
 
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/token")
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
 
 def get_current_user_from_token(
