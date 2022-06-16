@@ -182,8 +182,14 @@ export function init() {
     if (req.status == 401) {
       setTimeout(async () => {
         let p = new URLSearchParams();
-        p.set("username", prompt("User name"));
-        p.set("password", prompt("Password"));
+        let username = prompt("User name");
+        if (!username) {
+          p.set("username", "anonymous");
+          p.set("password", "anonymous");
+        } else {
+          p.set("username", username);
+          p.set("password", prompt("Password"));
+        }
         let req = await fetch("token", {
           method: "POST",
           body: p,
