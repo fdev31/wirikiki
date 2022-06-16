@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-ALLOW_FOLDERS = True
-
 import os
 from pydantic import BaseModel
 from typing import List, Optional, Dict, Any
@@ -23,8 +21,8 @@ except ImportError:
 else:
     app = FastAPI(debug=True, default_response_class=ORJSONResponse)
 
-CFG_FILE = os.environ.get("CFG_FILE", os.path.join(os.path.curdir, "settings.toml"))
-cfg: Dict[str, Dict[str, Any]] = tomli.load(open(CFG_FILE, "rb"))
+config_fname = os.environ.get("CFG_FILE", os.path.join(os.path.curdir, "settings.toml"))
+cfg: Dict[str, Dict[str, Any]] = tomli.load(open(config_fname, "rb"))
 PATH = os.environ.get("DBDIR", cfg["database"]["directory"])
 
 if not os.path.exists(PATH):
@@ -153,7 +151,7 @@ class Note(BaseModel):
         return n
 
     async def save(self, creation=False):
-        if creation and ALLOW_FOLDERS:
+        if creation:  # auto make directory if it doesn't exist
             rootDir = os.path.dirname(self.filename)
             if not os.path.exists(rootDir):
                 os.makedirs(rootDir, exist_ok=True)
