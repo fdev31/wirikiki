@@ -14,7 +14,7 @@ freeze:
 	rm -fr dist
 	./.tox/py310/bin/pip install pyinstaller
 	./.tox/py310/bin/python setup.py install
-	./.tox/py310/bin/pyinstaller scripts/wirikiki --add-data apps:apps --add-data myKB/Intro.md:myKB/Intro.md --add-data myKB/images/.keep_me:myKB/images/.keep_me -w -p . --collect-submodules server -F
+	./.tox/py310/bin/pyinstaller scripts/wirikiki --add-data apps:apps --add-data myKB/Intro.md:myKB/Intro.md --add-data myKB/images/.keep_me:myKB/images/.keep_me -w -p . --collect-submodules wirikiki -F
 
 watch:
 	./node_modules/.bin/rollup -c rollup.config.js -w
@@ -36,7 +36,7 @@ clean:
 	rm -fr ${DISTFILE}
 
 serve: venv
-	./.tox/py310/bin/uvicorn server:app --reload --port 8000 --log-level=debug
+	./.tox/py310/bin/uvicorn wirikiki:app --reload --port 8000 --log-level=debug
 
 venv:
 	tox
