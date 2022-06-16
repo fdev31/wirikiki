@@ -86,6 +86,7 @@ async def getNotes(
     return entries
 
 
+auth_init(app)
 app.mount("/images/", StaticFiles(directory=IMAGE_PATH), name="images")
 app.mount("/", StaticFiles(directory="apps"), name="static")
 
@@ -102,5 +103,3 @@ if cfg["database"]["use_git"]:
                 os.system(f'git add "{root[len(fullpath)+1:]}/{fname}"')
     os.system('git commit -m "Wiki startup"')
     os.chdir(cwd)
-
-auth_init(app)
