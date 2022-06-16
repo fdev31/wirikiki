@@ -1,0 +1,9 @@
+#!/bin/sh
+HOST=gate.lan
+DST=$HOST:wirikiki-posix
+
+DIST=1 make jsfiles
+scp apps/main.js $DST/apps/main.js
+scp -r wirikiki $DST/
+ssh -- $HOST sudo systemctl restart wirikiki
+ssh -- $HOST sudo nginx -s reload

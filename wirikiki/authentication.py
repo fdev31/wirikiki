@@ -60,9 +60,11 @@ def get_current_user_from_token(
             raise credentials_exception
     except JWTError:
         raise credentials_exception
-    user = db.get(username)
-    if user is None:
-        raise credentials_exception
+
+    if not (cfg["users"]["allow_anonymous"] and username == "anonymous"):
+        user = db.get(username)
+        if user is None:
+            raise credentials_exception
     return dict(name=username)
 
 
