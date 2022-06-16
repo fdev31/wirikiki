@@ -33,6 +33,7 @@ clean:
 	rm -fr .tox
 	rm -fr dist
 	rm -fr src/*/*.vue
+	rm -fr src/*.vue
 	rm -fr ${DISTFILE}
 
 serve: venv
