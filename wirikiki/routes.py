@@ -31,9 +31,7 @@ def index():
     return RedirectResponse(url="/index.html")
 
 
-@app.post(
-    "/upload",
-)
+@app.post("/upload")
 async def upload(
     file: UploadFile = File(...),
     current_user: dict = Depends(get_current_user_from_token),
