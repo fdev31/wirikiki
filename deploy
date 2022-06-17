@@ -1,9 +1,10 @@
 #!/bin/sh
+set -xe
 HOST=gate.lan
 DST=$HOST:wirikiki-posix
 
 DIST=1 make jsfiles
-scp apps/main.js $DST/apps/main.js
+rsync -rav apps $DST/
 scp -r wirikiki $DST/
 ssh -- $HOST sudo systemctl restart wirikiki
 ssh -- $HOST sudo nginx -s reload
