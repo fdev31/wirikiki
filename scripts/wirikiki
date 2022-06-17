@@ -20,7 +20,11 @@ if pid > 0: # main process, launch browser
 else: # daemon (children) process
     import sys
     import uvicorn
-    from setproctitle import setproctitle
-    setproctitle(sys.argv[0])
+    try:
+        from setproctitle import setproctitle
+    except ImportError:
+        pass
+    else:
+        setproctitle(sys.argv[0])
     os.setsid() # detach
     uvicorn.run("wirikiki:app", host=HOST, port=PORT, log_level="warning")
