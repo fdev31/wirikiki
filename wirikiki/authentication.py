@@ -26,7 +26,7 @@ def create_access_token(data: dict, expires_delta: Optional[timedelta] = None):
 _user_db: Dict[str, str] = {}
 
 
-def get_user_db():
+def get_user_db() -> Dict[str, str]:
     if not _user_db:
         for line in open(cfg["users"]["database"], "r", encoding="utf-8"):
             user, password = line.split(" ", 1)
@@ -50,7 +50,7 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
 def get_current_user_from_token(
     token: str = Depends(oauth2_scheme), db: dict = Depends(get_user_db)
-):
+) -> Dict[str, str]:
     try:
         payload = jwt.decode(
             token, cfg["token"]["key"], algorithms=[cfg["token"]["algorithm"]]
@@ -68,7 +68,7 @@ def get_current_user_from_token(
     return dict(name=username)
 
 
-def make_password(password):
+def make_password(password: str) -> str:
     text = (cfg["users"]["salt"] + password).encode("utf-8")
     return hashlib.sha512(text).hexdigest()
 
@@ -78,7 +78,7 @@ def init(application):
     def _login_for_access_token(
         form_data: OAuth2PasswordRequestForm = Depends(),
         db: dict = Depends(get_user_db),
-    ):
+    ) -> Dict[str, str]:
         is_anonymous = (
             form_data.username == "anonymous" and cfg["users"]["allow_anonymous"]
         )
