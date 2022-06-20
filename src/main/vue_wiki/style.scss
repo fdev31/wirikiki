@@ -1,5 +1,5 @@
-@use 'variables' as vars;
-@use 'sass:math';
+@use "variables" as vars;
+@use "sass:math";
 
 $top-bar-height: 48px;
 
@@ -54,7 +54,6 @@ h1.toptitle.scrolled {
   @include shadowed();
   @include animateSlow();
   position: fixed;
-  background-color: lighten(vars.$background-color, vars.$shade-delta);
   border-radius: 0 5px 5px 0;
   margin: 0;
   padding: 0 1ex 0 0;
