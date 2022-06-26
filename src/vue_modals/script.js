@@ -1,4 +1,4 @@
-import { gE } from "./lib/utils";
+import { gE, getTokenHeader } from "./lib/utils";
 import MicroModal from "micromodal";
 
 MicroModal.init();
@@ -14,6 +14,9 @@ export default {
   mounted() {
     const myDropzone = new Dropzone("form#upload-zone", { url: "upload" });
     const vu = this;
+    myDropzone.on("sending", (file, xhr, formData) => {
+      xhr.setRequestHeader("Authorization", getTokenHeader().Authorization);
+    });
     myDropzone.on("addedfile", (file) => {
       vu.$emit("addedImage", file);
     });
