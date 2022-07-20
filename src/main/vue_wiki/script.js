@@ -190,10 +190,11 @@ export default {
         { hasInput: true },
         async (pat) => {
           const lowPat = pat.toLowerCase();
+          const matchFunc = (text) => text.toLowerCase().indexOf(lowPat) != -1;
           this._matching.clear();
           let firstMatch = null;
           for (let page of this.pages) {
-            if (page.content.toLowerCase().indexOf(lowPat) != -1) {
+            if (matchFunc(page.content) || matchFunc(page.name)) {
               this._matching.add(page.name);
               if (firstMatch == null) firstMatch = page.name;
             }
