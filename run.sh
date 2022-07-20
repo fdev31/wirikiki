@@ -17,5 +17,5 @@ if [ ! -d venv ]; then
     ./venv/bin/pip install -r require.txt
 fi
 
-./venv/bin/uvicorn server:app --port 8000 --host 0.0.0.0 &
+./venv/bin/uvicorn wirikiki:app --port 8000 --host 0.0.0.0 &
 $CHROME --app="http://localhost:8000" --new-window
