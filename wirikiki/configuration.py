@@ -7,7 +7,13 @@ from typing import Dict, Any
 import tomli
 
 config_fname = os.environ.get("CFG_FILE", os.path.join(os.path.curdir, "settings.toml"))
-cfg: Dict[str, Dict[str, Any]] = tomli.load(open(config_fname, "rb"))
+try:
+    cfg: Dict[str, Dict[str, Any]] = tomli.load(open(config_fname, "rb"))
+except FileNotFoundError:
+    print(
+        "Can't find settings.toml in the current folder, set CFG_FILE in the environment and try again"
+    )
+    raise SystemExit(-1)
 
 PATH = os.environ.get(
     "DBDIR",
