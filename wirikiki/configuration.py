@@ -1,12 +1,20 @@
-__all__ = ["cfg", "IMAGE_PATH", "PATH"]
+__all__ = ["cfg", "IMAGE_PATH", "PATH", "USERS"]
 
 import os
+from string import Template
 from typing import Dict, Any
+
 import tomli
 
 config_fname = os.environ.get("CFG_FILE", os.path.join(os.path.curdir, "settings.toml"))
 cfg: Dict[str, Dict[str, Any]] = tomli.load(open(config_fname, "rb"))
-PATH = os.environ.get("DBDIR", cfg["database"]["directory"])
+
+PATH = os.environ.get(
+    "DBDIR",
+    Template(cfg["database"]["directory"]).substitute(root=cfg["general"]["base_dir"]),
+)
+
+USERS = Template(cfg["users"]["database"]).substitute(root=cfg["general"]["base_dir"])
 
 if not os.path.exists(PATH):
     PATH = os.path.curdir

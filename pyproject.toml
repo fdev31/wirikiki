@@ -4,10 +4,13 @@ version = "1.0.0"
 description = "A tiny desktop wiki"
 homepage = "http://github.com/fdev31/wirikiki/"
 authors = ["fdev31 <fdev31@gmail.com>"]
+include = [
+    "apps/**",
+    "wirikiki/config/settings.toml",
+    "wirikiki/web/**",
+    "wirikiki/myKB/**",
+]
 packages = [
-    { include = "logging.yaml" },
-    { include = "settings.toml" },
-    { include = "apps" },
     { include = "wirikiki" },
 ]
 

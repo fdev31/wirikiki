@@ -7,7 +7,7 @@ from fastapi.security import OAuth2PasswordRequestForm, OAuth2PasswordBearer
 from datetime import timedelta, datetime
 from jose import JWTError, jwt  # type: ignore
 
-from .configuration import cfg
+from .configuration import cfg, USERS
 
 
 def create_access_token(data: dict, expires_delta: Optional[timedelta] = None):
@@ -28,7 +28,7 @@ _user_db: Dict[str, str] = {}
 
 def get_user_db() -> Dict[str, str]:
     if not _user_db:
-        for line in open(cfg["users"]["database"], "r", encoding="utf-8"):
+        for line in open(USERS, "r", encoding="utf-8"):
             user, password = line.split(" ", 1)
             _user_db[user] = password.strip()
     return _user_db
