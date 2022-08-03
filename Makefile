@@ -31,7 +31,9 @@ clean:
 serve: venv
 	./.tox/py310/bin/uvicorn wirikiki.routes:app --reload --port 8000 --log-level=debug
 
-venv:
+venv: .tox
+
+.tox:
 	tox
 #	python -m venv venv
 #	./venv/bin/python setup.py install
