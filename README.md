@@ -16,7 +16,7 @@ In comparison to [Jupyter](https://jupyter.org/) it lacks the python notes but b
 3 alternative ways to get a runnable code:
 
 - download a release (TODO)
-- `make dist`
+- `make dev`
 - manual installation
 
 ```
@@ -27,7 +27,19 @@ DIST=1 ./node_modules/.bin/rollup -c rollup.config.js
 
 # Usage
 
-Just execute `run.sh`, it will automatically install the python virtual environment.
+## Create one wiki
+
+```
+wirikiki new myNewWiki
+```
+
+## Run the wiki
+
+Go to the newly created folder "myNewWiki" and run:
+
+```
+wirikiki
+```
 
 ## Zero-install mode
 
