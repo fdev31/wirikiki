@@ -182,21 +182,45 @@ export function init() {
     if (req.status == 401) {
       setTimeout(async () => {
         let p = new URLSearchParams();
-        let username = prompt("User name");
-        if (!username) {
-          p.set("username", "anonymous");
-          p.set("password", "anonymous");
-        } else {
-          p.set("username", username);
-          p.set("password", prompt("Password"));
+
+        let _passwd_h = (login, passwd) => {
+            console.log("Login with", login, passwd);
+              p.set("username", login);
+              p.set("password", passwd);
+
+            fetch("token", {
+              method: "POST",
+              body: p,
+            })
+            .then( async (req)=> {
+                let data = await req.json();
+                document.cookie = "accessToken=" + data.access_token;
+                document.location.href = document.location.href;
+            });
+        };
+
+        let _login_h = (username) => {
+            if (!username) {
+              _passwd_h("anonymous", "anonymous");
+            } else {
+                app.vue.$refs.modals.askUser(
+                      `Secret`,
+                      `Enter your password`,
+                      "Login",
+                      { hasPassword: true },
+                      (passwd) => _passwd_h(username, passwd)
+                  )
+            }
         }
-        let req = await fetch("token", {
-          method: "POST",
-          body: p,
-        });
-        let data = await req.json();
-        document.cookie = "accessToken=" + data.access_token;
-        document.location.href = document.location.href;
+
+        app.vue.$refs.modals.askUser(
+              `Login`,
+              `Enter your user name or nothing for anonymous`,
+              "Ok",
+              { hasInput: true },
+              _login_h
+          )
+
       }, 1000);
     } else {
       req.json().then(vue.setContent);
