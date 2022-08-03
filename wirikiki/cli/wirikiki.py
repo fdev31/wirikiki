@@ -30,7 +30,7 @@ def run():
         else:
             setproctitle(sys.argv[0])
         os.setsid()  # detach
-        uvicorn.run("wirikiki:app", host=HOST, port=PORT, log_level="warning")
+        uvicorn.run("wirikiki.routes:app", host=HOST, port=PORT, log_level="warning")
 
 
 if __name__ == "__main__":

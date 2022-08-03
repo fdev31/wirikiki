@@ -37,7 +37,7 @@ clean:
 	rm -fr ${DISTFILE}
 
 serve: venv
-	./.tox/py310/bin/uvicorn wirikiki:app --reload --port 8000 --log-level=debug
+	./.tox/py310/bin/uvicorn wirikiki.routes:app --reload --port 8000 --log-level=debug
 
 venv:
 	tox
