@@ -1,7 +1,7 @@
 # Override the settings file path using (in bash)
 # export CFG_FILE=/path/to/config.toml
 [general]
-base_dir = "."
+base_dir = "./wirikiki/"
 
 [token]
 algorithm = "HS256"
@@ -14,6 +14,6 @@ directory = "${root}/myKB"
 use_git = true
 
 [users]
-database = "${root}/users.db"
+database = "${root}/config/users.db"
 allow_anonymous = true
 salt = "mySalt"
