@@ -68,10 +68,10 @@ export default {
       }
       this.userInput = "";
       MicroModal.show("modal-action", getOptions(this));
-      if (this.hasInput) {
+      if (this.hasInput || this.hasPassword) {
         setTimeout(() => {
           gE("input.userInput").focus();
-        });
+        }, 300);
       }
     },
     showUploadForm() {
