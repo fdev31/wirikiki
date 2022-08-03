@@ -4,7 +4,7 @@ import sys
 
 PORT = 8000
 HOST = "127.0.0.1"
-SIMPLE = False
+SIMPLE = os.environ.get('FG', False)
 
 if len(sys.argv) > 1:
     if sys.argv[1] in {"create", "new"}:
@@ -40,11 +40,7 @@ def run():
 
     if pid > 0:  # main process, launch browser
         import time
-
-        try:
-            import native_web_app as webbrowser
-        except ImportError:
-            import webbrowser
+        import webbrowser
 
         time.sleep(1)
         webbrowser.open(f"http://{HOST}:{PORT}")
