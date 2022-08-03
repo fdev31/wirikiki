@@ -1,12 +1,12 @@
 _Wirikiki_ aims at being a productivity oriented **markdown notebook**.
 It's compatible with the most common features supported by GitHub's markdown and adds a few other.
 
-In comparison to [Jupyter](https://jupyter.org/) it lacks the python notes but brings:
+Aims at
 
-- speed / **light** footprint
+- fast / **small** footprint
 - **simplicity** of use
 - **uncluttered** UI supporting both **dark & bright modes**
-- more **advanced markdown support** via [markItDown](https://markitdown.netlify.app/) and plugins and [Marked](https://marked.js.org/) for the editor
+- **advanced markdown support** via [markItDown](https://markitdown.netlify.app/) and plugins and [Marked](https://marked.js.org/) for the editor
 - auto **archival** (using git)
 
 # Installation
