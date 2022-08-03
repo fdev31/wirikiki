@@ -29,7 +29,7 @@ const plugins = [
   replace({
     preventAssignment: true,
     values: {
-      "process.env.NODE_ENV": '"production"',
+      "process.env.NODE_ENV": (dev_packages.length?'"development"':'"production"'),
       module: "undefined",
     },
   }),
