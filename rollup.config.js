@@ -46,7 +46,7 @@ function Entry(name) {
       sourcemap: true,
       validate: true,
       compact: true,
-      file: `apps/${name}.js`,
+      file: `wirikiki/web/${name}.js`,
     },
   };
 }
