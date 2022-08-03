@@ -13,9 +13,9 @@ In comparison to [Jupyter](https://jupyter.org/) it lacks the python notes but b
 
 ## Building
 
-3 alternative ways to get a runnable code:
+3 ways to get a runnable code:
 
-- download a release (TODO)
+- install a release (eg: using `pip`)
 - `make dev`
 - manual installation
 
