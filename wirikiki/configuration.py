@@ -21,9 +21,9 @@ except FileNotFoundError:
 ROOT = os.path.dirname(wirikiki.__file__)
 PATH = os.environ.get(
     "DBDIR",
-    Template(cfg["database"]["directory"]).substitute(data=cfg["general"]["base_dir"]),
+    Template(cfg["database"]["directory"]).substitute(root=cfg["general"]["base_dir"]),
 )
-USERS = Template(cfg["users"]["database"]).substitute(data=cfg["general"]["base_dir"])
+USERS = Template(cfg["users"]["database"]).substitute(root=cfg["general"]["base_dir"])
 
 FRONT = os.path.join(ROOT, "web")
 
