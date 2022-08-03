@@ -128,6 +128,13 @@
         v-model="userInput"
         v-on:keyup.enter="runConfirmation()"
       />
+      <input
+        type="password"
+        class="userInput"
+        v-if="hasPassword"
+        v-model="userInput"
+        v-on:keyup.enter="runConfirmation()"
+      />
       <footer class="modal__footer">
         <button
           class="modal__btn modal__btn-primary"

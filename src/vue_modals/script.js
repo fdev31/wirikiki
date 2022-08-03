@@ -46,7 +46,11 @@ export default {
     },
     runConfirmation() {
       MicroModal.close(this.currentModal);
-      this._confirmation(this.hasInput ? this.userInput : undefined);
+      if (this.hasPassword) {
+        this._confirmation(this.userInput);
+      } else {
+          this._confirmation(this.hasInput ? this.userInput : undefined);
+      }
     },
     hide() {
       if (this.currentModal) MicroModal.close(this.currentModal);
@@ -59,6 +63,9 @@ export default {
       this.actionName = actionName;
       let opts = options || {};
       this.hasInput = opts.hasInput;
+      if (! this.hasInput) {
+          this.hasPassword = opts.hasPassword;
+      }
       this.userInput = "";
       MicroModal.show("modal-action", getOptions(this));
       if (this.hasInput) {
