@@ -5,6 +5,7 @@ __all__ = ["app"]
 import os
 from typing import List, Dict
 
+import asyncio
 import aiofiles
 
 from fastapi import FastAPI, UploadFile, File, Depends
@@ -12,7 +13,7 @@ from fastapi.staticfiles import StaticFiles
 from starlette.responses import RedirectResponse
 
 from .models import Note
-from .configuration import cfg, PATH, IMAGE_PATH
+from .configuration import cfg, PATH, IMAGE_PATH, FRONT
 from .versionning import gitRun, gitRemove, gitSave
 from .authentication import get_current_user_from_token, init as auth_init
 
@@ -88,11 +89,11 @@ async def getNotes(
 
 auth_init(app)
 app.mount("/images/", StaticFiles(directory=IMAGE_PATH), name="images")
-app.mount("/", StaticFiles(directory="apps"), name="static")
+app.mount("/", StaticFiles(directory=FRONT), name="static")
 
 if cfg["database"]["use_git"]:
     if not os.path.exists(os.path.join(PATH, ".git")):
-        gitRun("init")
+        asyncio.gather(gitRun("init"))
 
     fullpath = os.path.abspath(os.path.expanduser(os.path.expandvars(PATH)))
     cwd = os.getcwd()
