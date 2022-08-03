@@ -2,19 +2,11 @@
 DISTFILE=wiki.zip
 DIST_DIR:=$(shell python -c "import os; print('wirikiki-' + os.name)")
 
-ARCHIVE=wirikiki apps require.txt run.sh myKB/anonymous/Intro.md myKB/anonymous/README.md scripts/wirikiki scripts/wirikiki-pwgen setup.py
-
 all: jsfiles venv
 
 jsfiles:
 	sh ./makevueApps.sh
 	./node_modules/.bin/rollup -c rollup.config.js
-
-freeze:
-	rm -fr dist
-	./.tox/py310/bin/pip install pyinstaller
-	./.tox/py310/bin/python setup.py install
-	./.tox/py310/bin/pyinstaller scripts/wirikiki --add-data apps:apps --add-data myKB/Intro.md:myKB/Intro.md --add-data myKB/images/.keep_me:myKB/images/.keep_me -w -p . --collect-submodules wirikiki -F
 
 watch:
 	./node_modules/.bin/rollup -c rollup.config.js -w
@@ -28,7 +20,7 @@ dev:
 	npm install
 
 clean:
-	rm -fr apps/*.js apps/*.css apps/*.map
+	make dist
 	rm -fr venv
 	rm -fr .tox
 	rm -fr dist
@@ -46,16 +38,4 @@ venv:
 #	./scripts/fix_top_level.py venv
 
 dist: vueapps
-	rm -fr ${DIST_DIR}
-	mkdir ${DIST_DIR}
-	make venv
-	make freeze
-	cp dist/wirikiki ${DIST_DIR}
-	make clean
 	DIST=1 make jsfiles
-	rm -fr apps/*.map
-	zip -r tmp.zip ${ARCHIVE}
-	(cd ${DIST_DIR} && unzip ../tmp.zip)
-	rm -f tmp.zip
-	zip -9r ${DISTFILE} ${DIST_DIR}
-	rm -fr ${DIST_DIR}
