@@ -1,4 +1,0 @@
-#!/bin/env python
-import sys
-from wirikiki.authentication import make_password
-print(make_password(sys.argv[1]))
