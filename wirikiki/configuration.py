@@ -9,14 +9,13 @@ import wirikiki
 import tomli
 
 config_fname = os.environ.get("CFG_FILE", os.path.join(os.path.curdir, "settings.toml"))
+USING_DEFAULTS = False
 
-try:
-    cfg: Dict[str, Dict[str, Any]] = tomli.load(open(config_fname, "rb"))
-except FileNotFoundError:
-    print(
-        "Can't find settings.toml in the current folder, set CFG_FILE in the environment and try again"
-    )
-    raise SystemExit(-1)
+if not os.path.exists(config_fname):
+    config_fname = os.path.join(os.path.dirname(wirikiki.__file__), 'config', 'settings.toml')
+    USING_DEFAULTS = True
+
+cfg: Dict[str, Dict[str, Any]] = tomli.load(open(config_fname, "rb"))
 
 ROOT = os.path.dirname(wirikiki.__file__)
 PATH = os.environ.get(

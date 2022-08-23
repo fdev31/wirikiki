@@ -35,10 +35,25 @@ if len(sys.argv) > 1:
         shutil.rmtree("web")
         shutil.copytree(os.path.join(ROOT, "web"), "web")
         raise SystemExit(0)
+    if sys.argv[1] == "help":
+        print("""Possible options:
+
+* new <name>
+* update
+
+Without arguments it will just run the wiki in the current folder.""")
+        raise SystemExit(0)
 
 
 def run():
     import os
+    from wirikiki.configuration import USING_DEFAULTS
+
+    if USING_DEFAULTS:
+        print(
+            "Can't find settings.toml in the current folder, set CFG_FILE in the environment and try again"
+        )
+        raise SystemExit(-1)
 
     pid = 0 if SIMPLE else os.fork()
 
