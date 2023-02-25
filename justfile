@@ -5,12 +5,13 @@ DISTFILE := "wiki.zip"
 
 venv := ".tox/" + `grep envdir tox.ini | sed 's#.*/##' `
 
+# List available commands (this output)
 default:
     @just --list
 
 # build js files
 jsfiles:
-	sh ./makevueApps.sh
+	./makevueApps.sh
 	./node_modules/.bin/rollup -c rollup.config.js
 
 # build js files and watch for changes
@@ -29,7 +30,6 @@ dev:
 
 # cleanup build files
 clean:
-	make dist
 	rm -fr venv
 	rm -fr {{venv}}
 	rm -fr dist
@@ -44,12 +44,9 @@ serve:
 # Create the virtual environment (run it once)
 venv:
 	tox
-#	python -m venv venv
-#	./venv/bin/python setup.py install
-#	./scripts/fix_top_level.py venv
 
 dist: vueapps
-	DIST=1 make jsfiles
+	DIST=1 just jsfiles
 
 test:
 	{{venv}}/bin/mypy wirikiki
