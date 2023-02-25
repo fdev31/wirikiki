@@ -12,7 +12,9 @@ config_fname = os.environ.get("CFG_FILE", os.path.join(os.path.curdir, "settings
 USING_DEFAULTS = False
 
 if not os.path.exists(config_fname):
-    config_fname = os.path.join(os.path.dirname(wirikiki.__file__), 'config', 'settings.toml')
+    config_fname = os.path.join(
+        os.path.dirname(wirikiki.__file__), "config", "settings.toml"
+    )
     USING_DEFAULTS = True
 
 cfg: Dict[str, Dict[str, Any]] = tomli.load(open(config_fname, "rb"))

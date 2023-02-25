@@ -18,7 +18,7 @@ from .versionning import gitRun, gitRemove, gitSave
 from .authentication import get_current_user_from_token, init as auth_init
 
 try:
-    import orjson
+    import orjson  # noqa: F401
 except ImportError:
     app = FastAPI(debug=True)
 else:

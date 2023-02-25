@@ -5,7 +5,7 @@ import shutil
 
 PORT = 8000
 HOST = "127.0.0.1"
-SIMPLE = os.environ.get('FG', False)
+SIMPLE = os.environ.get("FG", False)
 
 if len(sys.argv) > 1:
     if sys.argv[1] == "new":
@@ -32,16 +32,19 @@ if len(sys.argv) > 1:
             raise SystemExit(1)
     elif sys.argv[1] == "update":
         from wirikiki.configuration import ROOT
+
         shutil.rmtree("web")
         shutil.copytree(os.path.join(ROOT, "web"), "web")
         raise SystemExit(0)
     if sys.argv[1] == "help":
-        print("""Possible options:
+        print(
+            """Possible options:
 
 * new <name>
 * update
 
-Without arguments it will just run the wiki in the current folder.""")
+Without arguments it will just run the wiki in the current folder."""
+        )
         raise SystemExit(0)
 
 

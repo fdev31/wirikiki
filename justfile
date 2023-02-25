@@ -41,6 +41,7 @@ clean:
 serve: venv
 	{{venv}}/bin/uvicorn wirikiki.routes:app --reload --port 8000 --log-level=debug
 
+# Create the virtual environment (implicit in most cases)
 venv:
 	tox
 #	python -m venv venv
@@ -52,4 +53,5 @@ dist: vueapps
 
 test:
 	{{venv}}/bin/mypy wirikiki
+	{{venv}}/bin/vulture wirikiki
 
