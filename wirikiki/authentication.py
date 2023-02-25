@@ -55,7 +55,7 @@ def get_current_user_from_token(
         payload = jwt.decode(
             token, cfg["token"]["key"], algorithms=[cfg["token"]["algorithm"]]
         )
-        username: str = payload.get("sub")
+        username = payload.get("sub")
         if username is None:
             raise credentials_exception
     except JWTError:

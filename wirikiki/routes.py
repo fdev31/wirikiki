@@ -37,9 +37,10 @@ async def upload(
     file: UploadFile = File(...),
     current_user: dict = Depends(get_current_user_from_token),
 ):
-    fullname = os.path.join(IMAGE_PATH, file.filename)
-    async with aiofiles.open(fullname, "wb") as f:
-        await f.write(await file.read())
+    if file.filename:
+        fullname = os.path.join(IMAGE_PATH, file.filename)
+        async with aiofiles.open(fullname, "wb") as f:
+            await f.write(await file.read())
 
 
 @app.delete("/notebook")

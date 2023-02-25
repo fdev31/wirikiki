@@ -54,85 +54,6 @@ span.btn:hover {
   transition-duration: 300ms;
   margin-top: 50px;
 }
-div#editor.rendering {
-  padding: 0 1em;
-}
-div#editor.editing {
-  padding: 0;
-}
-.editor-preview-side {
-  background-color: white;
-}
-.dark .editor-preview-side {
-  background-color: #5a5a5d;
-}
-div.CodeMirror {
-  background-color: #e1e5eb;
-  color: rgb(37, 37, 37);
-}
-.dark div.CodeMirror {
-  background-color: #4d4d50;
-  color: #ddd;
-}
-.editor-toolbar {
-  background-color: white !important;
-}
-ul.contains-task-list {
-  list-style-type: none;
-  padding: 0 1ex;
-}
-a,
-a:visited {
-  color: #346693;
-  text-decoration: none;
-}
-.dark a,
-.dark a:visited {
-  color: #c3d8ea;
-}
-a:hover {
-  text-decoration: underline;
-}
-pre {
-  background: #e4e4e4;
-  color: #111;
-  padding: 1ex;
-  border-radius: 1ex;
-  overflow-x: auto;
-}
-abbr {
-  cursor: help;
-}
-dt {
-  font-size: 130%;
-}
-
-/* tables formatting */
-table {
-  border-collapse: collapse;
-}
-tr {
-  border-bottom: solid 1px rgb(37, 37, 37);
-}
-td,
-th {
-  border-right: solid 1px rgb(37, 37, 37);
-  padding: 0.5ex 1ex;
-}
-.dark tr {
-  border-bottom: solid 1px #ddd;
-}
-.dark td,
-.dark th {
-  border-right: solid 1px #ddd;
-}
-td:last-child,
-th:last-child {
-  border-right: none;
-}
-tbody > tr:last-child {
-  border-bottom: none;
-}
 @charset "UTF-8";
 .modal {
   z-index: 5;
@@ -297,6 +218,85 @@ input.userInput {
 form#upload-zone {
   min-width: 400px;
   min-height: 400px;
+}
+div#editor.rendering {
+  padding: 0 1em;
+}
+div#editor.editing {
+  padding: 0;
+}
+.editor-preview-side {
+  background-color: white;
+}
+.dark .editor-preview-side {
+  background-color: #5a5a5d;
+}
+div.CodeMirror {
+  background-color: #e1e5eb;
+  color: rgb(37, 37, 37);
+}
+.dark div.CodeMirror {
+  background-color: #4d4d50;
+  color: #ddd;
+}
+.editor-toolbar {
+  background-color: white !important;
+}
+ul.contains-task-list {
+  list-style-type: none;
+  padding: 0 1ex;
+}
+a,
+a:visited {
+  color: #346693;
+  text-decoration: none;
+}
+.dark a,
+.dark a:visited {
+  color: #c3d8ea;
+}
+a:hover {
+  text-decoration: underline;
+}
+pre {
+  background: #e4e4e4;
+  color: #111;
+  padding: 1ex;
+  border-radius: 1ex;
+  overflow-x: auto;
+}
+abbr {
+  cursor: help;
+}
+dt {
+  font-size: 130%;
+}
+
+/* tables formatting */
+table {
+  border-collapse: collapse;
+}
+tr {
+  border-bottom: solid 1px rgb(37, 37, 37);
+}
+td,
+th {
+  border-right: solid 1px rgb(37, 37, 37);
+  padding: 0.5ex 1ex;
+}
+.dark tr {
+  border-bottom: solid 1px #ddd;
+}
+.dark td,
+.dark th {
+  border-right: solid 1px #ddd;
+}
+td:last-child,
+th:last-child {
+  border-right: none;
+}
+tbody > tr:last-child {
+  border-bottom: none;
 }
 body {
   background-color: #e1e5eb;

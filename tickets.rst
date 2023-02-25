@@ -1,7 +1,7 @@
 Tickets
 =======
 
-:total-count: 2
+:total-count: 3
 
 --------------------------------------------------------------------------------
 
@@ -25,3 +25,15 @@ Add a command to install the service (systemd)
 :priority: 0
 
 *
+
+--------------------------------------------------------------------------------
+
+Allow editing blocks
+====================
+
+:bugid: 3
+:created: 2023-02-25T21:01:09
+:priority: 0
+
+
+Make editable & deletable blocks for every h1 title

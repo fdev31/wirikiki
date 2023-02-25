@@ -5,8 +5,8 @@ import vue from "rollup-plugin-vue";
 import strip from "@rollup/plugin-strip";
 import analyze from "rollup-plugin-analyzer";
 import cssbundle from "rollup-plugin-css-bundle";
-import nodeResolve from "rollup-plugin-node-resolve";
-import commonjs from "rollup-plugin-commonjs";
+import nodeResolve from "@rollup/plugin-node-resolve"
+import commonjs from "@rollup/plugin-commonjs";
 import replace from "@rollup/plugin-replace";
 
 const globals = {
