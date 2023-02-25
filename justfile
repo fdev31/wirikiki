@@ -38,10 +38,10 @@ clean:
 	rm -fr {{DISTFILE}}
 
 # run the server
-serve: venv
+serve:
 	{{venv}}/bin/uvicorn wirikiki.routes:app --reload --port 8000 --log-level=debug
 
-# Create the virtual environment (implicit in most cases)
+# Create the virtual environment (run it once)
 venv:
 	tox
 #	python -m venv venv
