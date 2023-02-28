@@ -1,19 +1,7 @@
 Tickets
 =======
 
-:total-count: 3
-
---------------------------------------------------------------------------------
-
-convert makevueApps.sh to a python package
-==========================================
-
-:bugid: 1
-:created: 2022-08-04T01:02:06
-:priority: 0
-
-
-and publish it on pypi
+:total-count: 4
 
 --------------------------------------------------------------------------------
 
@@ -37,3 +25,17 @@ Allow editing blocks
 
 
 Make editable & deletable blocks for every h1 title
+
+--------------------------------------------------------------------------------
+
+Allow linking
+=============
+
+:bugid: 4
+:created: 2023-03-01T00:22:18
+:priority: 0
+
+- Create a "link" icon to copy current page link to clipboard
+- works only in anonymous mode ?
+- will load the page given on load, eg #page=Foobar (using the fragment)
+    - could also use a parameter
