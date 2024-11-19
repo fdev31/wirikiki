@@ -2,47 +2,21 @@
   <h1 :class="titleClass">
     <span @click="toggleSide()">{{pageTitle}}</span>
     <span id="barbuttons">
-      <bar-button
-        icon="img/search.svg"
-        caption="Search</br>[F]"
-        @click="searchMode()"
-      />
-      <bar-button
-        icon="img/edit.svg"
-        :caption="editorMode()?'Save</br>[Esc]':'Edit</br>[E]'"
-        @click="toggleEditor()"
-      />
-      <bar-button
-        icon="img/forget.svg"
-        v-if="editorMode()"
-        caption="Cancel"
-        @click="cancelEdit()"
-      />
-      <bar-button
-        icon="img/trash.svg"
-        v-else
-        caption="Delete</br>[DEL]"
-        @click="deletePage()"
-      />
-      <bar-button
-        icon="img/brightness.svg"
-        caption="Theme"
-        @click="toggleDark()"
-      />
+      <bar-button icon="img/search.svg" caption="Search</br>[F]" @click="searchMode()" />
+      <bar-button icon="img/edit.svg" :caption="editorMode()?'Save</br>[Esc]':'Edit</br>[E]'" @click="toggleEditor()" />
+      <bar-button icon="img/forget.svg" v-if="editorMode()" caption="Cancel" @click="cancelEdit()" />
+      <bar-button icon="img/trash.svg" v-else caption="Delete</br>[DEL]" @click="deletePage()" />
+      <bar-button icon="img/brightness.svg" caption="Theme" @click="toggleDark()" />
       <bar-button icon="img/gear.svg" caption="Help" @click="showHelp()" />
     </span>
   </h1>
 </div>
 <div id="sidebar">
-  <div
-    v-for="page in pages"
-    v-on:click="openPageByName(page.name)"
-    :class="getTabClasses(page.name)"
-    :key="page.name"
-  >
+  <div v-for="page in pages" v-on:click="openPageByName(page.name)" :class="getTabClasses(page.name)" :key="page.name">
     {{page.name.replace(new RegExp("[^/]*/"), "")}}
   </div>
   <div v-on:click="newPage()" class="pageTab"><b>+ Add new</b></div>
+  <div v-on:click="newFolder()" class="pageTab"><b>+ Add folder</b></div>
 </div>
 <div id="main">
   <markdown-editor ref="editor" @docChanged="savePage"></markdown-editor>

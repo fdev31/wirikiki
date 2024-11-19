@@ -7,7 +7,7 @@ from pydantic import BaseModel
 
 import aiofiles
 
-from .versionning import gitAdd, gitSave
+from .versioning import gitAdd, gitSave
 from .configuration import PATH
 
 

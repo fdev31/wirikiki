@@ -119,6 +119,41 @@ export default {
       if (this.pageTitle == name) c.push("opened");
       return c.join(" ");
     },
+    async newFolder() {
+      this.$refs.modals.askUser(
+        `Create a new folder`,
+        `Type the name for the new folder:`,
+        "Create",
+        { hasInput: true },
+        async (name) => {
+          if (!name) return;
+          let success = false;
+          const content = `# Index of ${name}`;
+          try {
+            let req = await fetch("notebook", {
+              method: "POST",
+              headers: Object.assign(
+                { "Content-Type": "application/json" },
+                getTokenHeader()
+              ),
+              body: JSON.stringify({ name: `${name}/index`, content }),
+            });
+            success = 200 == req.status;
+            name = (await req.json()).name;
+          } catch (err) {
+            console.error(err);
+          }
+          if (success) {
+            const idx = this.pages.length;
+            this.pages.push({ name, content });
+            pagesByName.set(name, idx);
+            this.openPage(idx);
+          } else {
+            alert("Error happened");
+          }
+        }
+      );
+    },
     async newPage() {
       this.$refs.modals.askUser(
         `Create a new note`,
