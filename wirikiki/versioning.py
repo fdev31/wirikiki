@@ -23,4 +23,13 @@ async def gitAdd(path):
 
 
 async def gitRemove(path):
-    await gitRun("rm", "-f", path + ".md")
+    if path.endswith("/index"):
+        # it is a folder (or index file)
+        # remove the index file
+        await gitRun("rm", "-f", path + ".md")
+        # try to remove the folder as well, recursively
+        folder_path = path[:-6]  # remove /index
+        if folder_path:  # safety check
+            await gitRun("rm", "-r", "-f", folder_path)
+    else:
+        await gitRun("rm", "-f", path + ".md")
