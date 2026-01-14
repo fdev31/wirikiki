@@ -94,7 +94,21 @@ async def updateNote(
     note: Note, current_user: dict = Depends(get_current_user_from_token)
 ):
     """Update one note"""
-    assert os.path.exists(note.filename)
+    # Fix 1: Replace assert with proper 404/400 check
+    if not os.path.exists(note.filename):
+        from fastapi import HTTPException
+
+        raise HTTPException(status_code=404, detail="Note not found")
+
+    # Security: Ensure note is within user's allowed path (simple check for now)
+    # The note.filename property uses PATH + note.name.
+    # note.name comes from user input.
+    # We should ensure '..' is not in note.name just like in addNote
+    if ".." in note.name:
+        from fastapi import HTTPException
+
+        raise HTTPException(status_code=400, detail="Invalid path")
+
     await note.save()
 
 
@@ -124,9 +138,17 @@ if cfg["database"]["use_git"]:
     fullpath = os.path.abspath(os.path.expanduser(os.path.expandvars(PATH)))
     cwd = os.getcwd()
     os.chdir(PATH)
+    # Fix 2: Replace os.system with safer subprocess calls via gitRun or subprocess directly
+    # Since gitRun is async and we are at top level (sync), we might need os.system or subprocess.run
+    # but strictly with list arguments, no shell=True.
+    import subprocess
+
     for root, _dirs, files in os.walk(fullpath):
         for fname in files:
             if fname.endswith(".md"):
-                os.system(f'git add "{root[len(fullpath) + 1 :]}/{fname}"')
-    os.system('git commit -m "Wiki startup"')
+                # Safe: subprocess with list args prevents shell injection
+                rel_path = f"{root[len(fullpath) + 1 :]}/{fname}"
+                subprocess.run(["git", "add", rel_path], check=False)
+
+    subprocess.run(["git", "commit", "-m", "Wiki startup"], check=False)
     os.chdir(cwd)
