@@ -34,36 +34,43 @@
   </h1>
 </div>
 <div id="sidebar">
-  <div 
-    v-for="page in pages" 
+  <div
+    v-for="page in pages"
     v-show="isPageVisible(page.name)"
     @click.stop="isFolder(page.name) ? toggleFolder(page.name) : openPageByName(page.name)"
-    :class="getTabClasses(page.name)" 
+    :class="getTabClasses(page.name)"
     :key="page.name"
     :style="getIndent(page.name)"
-    class="sidebar-item-container">
-    
+    class="sidebar-item-container"
+  >
     <div class="item-content">
-        <span v-if="isFolder(page.name)" class="folder-icon">
-          {{ isCollapsed(page.name) ? '📁' : '📂' }}
-        </span>
-        <span v-else-if="page.name !== 'Home'" class="file-icon">
-           📄
-        </span>
-        <span class="item-name">{{ getDisplayName(page.name) }}</span>
+      <span v-if="isFolder(page.name)" class="folder-icon">
+        {{ isCollapsed(page.name) ? '📁' : '📂' }}
+      </span>
+      <span v-else-if="page.name !== 'Home'" class="file-icon"> 📄 </span>
+      <span class="item-name">{{ getDisplayName(page.name) }}</span>
     </div>
 
-    <div v-if="isFolder(page.name) && !isCollapsed(page.name)" class="item-actions">
-        <span @click.stop="newPage(getPageParent(page.name))" title="New Page in this folder" class="action-btn">📄+</span>
-        <span @click.stop="newFolder(getPageParent(page.name))" title="New Folder in this folder" class="action-btn">📁+</span>
+    <div
+      v-if="isFolder(page.name) && !isCollapsed(page.name)"
+      class="item-actions"
+    >
+      <span
+        @click.stop="newPage(getPageParent(page.name))"
+        title="New Page in this folder"
+        class="action-btn"
+        >📄+</span
+      >
+      <span
+        @click.stop="newFolder(getPageParent(page.name))"
+        title="New Folder in this folder"
+        class="action-btn"
+        >📁+</span
+      >
     </div>
   </div>
   <div v-on:click="newPage()" class="pageTab"><b>+ Add new root note</b></div>
   <div v-on:click="newFolder()" class="pageTab"><b>+ Add root folder</b></div>
-</div>
-
-  <div v-on:click="newPage()" class="pageTab"><b>+ Add new</b></div>
-  <div v-on:click="newFolder()" class="pageTab"><b>+ Add folder</b></div>
 </div>
 <div id="main">
   <markdown-editor ref="editor" @docChanged="savePage"></markdown-editor>

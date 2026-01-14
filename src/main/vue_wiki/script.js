@@ -5,7 +5,7 @@ async function saveDoc(docId, content) {
     method: "PUT",
     headers: Object.assign(
       { "Content-Type": "application/json" },
-      getTokenHeader(),
+      getTokenHeader()
     ),
     body: JSON.stringify({ name: docId, content }),
   });
@@ -78,22 +78,22 @@ export default {
       return name.split("/").pop();
     },
     getIndent(name) {
-       let depth = (name.match(/\//g) || []).length;
-       if (name.endsWith("/index")) depth--;
-       return { paddingLeft: (depth * 15 + 5) + 'px' };
+      let depth = (name.match(/\//g) || []).length;
+      if (name.endsWith("/index")) depth--;
+      return { paddingLeft: depth * 15 + 5 + "px" };
     },
     contextMenu(evt, pageName) {
-        // Prevent default browser context menu if we were implementing a custom one
-        // But the user asked for buttons.
-        // For now, let's keep it simple.
-        // But we need a way to pass the folder context to the "add" buttons.
+      // Prevent default browser context menu if we were implementing a custom one
+      // But the user asked for buttons.
+      // For now, let's keep it simple.
+      // But we need a way to pass the folder context to the "add" buttons.
     },
     getPageParent(name) {
-        if (name.endsWith("/index")) {
-            name = name.replace(/\/index$/, "");
-        }
-        // If it's a folder (e.g. "foo"), we want "foo" as parent for new items
-        return name;
+      if (name.endsWith("/index")) {
+        name = name.replace(/\/index$/, "");
+      }
+      // If it's a folder (e.g. "foo"), we want "foo" as parent for new items
+      return name;
     },
 
     toggleFolder(name) {
@@ -181,7 +181,7 @@ export default {
             if (this.pageIndex) this.pageIndex--;
             this.openPage(this.pageIndex);
           }
-        },
+        }
       );
     },
     async savePage() {
@@ -207,7 +207,7 @@ export default {
           if (!name) return;
           // Clean the name of illegal chars
           name = name.replace(/[^a-zA-Z0-9 _-]/g, "");
-          
+
           let fullName = parent ? `${parent}/${name}` : name;
           let success = false;
           const content = `# Index of ${fullName}`;
@@ -224,11 +224,11 @@ export default {
             // The backend returns the name it used, let's respect it
             const res = await req.json();
             if (res.name) {
-                // If backend returns "folder/index", we just want the folder part usually
-                // but let's see how our frontend handles it.
-                // Our frontend stores entries as they come.
-                // We constructed `${fullName}/index` above.
-                fullName = res.name.replace(/\/index$/, "");
+              // If backend returns "folder/index", we just want the folder part usually
+              // but let's see how our frontend handles it.
+              // Our frontend stores entries as they come.
+              // We constructed `${fullName}/index` above.
+              fullName = res.name.replace(/\/index$/, "");
             }
           } catch (err) {
             console.error(err);
@@ -238,21 +238,25 @@ export default {
             // Add the index file for the new folder
             const indexName = `${fullName}/index`;
             this.pages.push({ name: indexName, content });
-            
+
             // Re-sort and re-index
             this.pages.sort((a, b) => {
-                const nA = a.name.endsWith("/index") ? a.name.replace(/\/index$/, "") : a.name;
-                const nB = b.name.endsWith("/index") ? b.name.replace(/\/index$/, "") : b.name;
-                return nA.toLowerCase().localeCompare(nB.toLowerCase());
+              const nA = a.name.endsWith("/index")
+                ? a.name.replace(/\/index$/, "")
+                : a.name;
+              const nB = b.name.endsWith("/index")
+                ? b.name.replace(/\/index$/, "")
+                : b.name;
+              return nA.toLowerCase().localeCompare(nB.toLowerCase());
             });
-            
+
             for (let i in this.pages) {
-                pagesByName.set(this.pages[i].name, i);
+              pagesByName.set(this.pages[i].name, i);
             }
-            
+
             this.collapsedFolders.delete(fullName);
             this.collapsedFolders = new Set(this.collapsedFolders); // trigger reactivity
-            
+
             this.openPageByName(indexName);
           } else {
             alert("Error happened");
@@ -268,7 +272,7 @@ export default {
         { hasInput: true },
         async (name) => {
           if (!name) return;
-           // Clean the name
+          // Clean the name
           name = name.replace(/[^a-zA-Z0-9 _-]/g, "");
 
           let fullName = parent ? `${parent}/${name}` : name;
@@ -292,58 +296,24 @@ export default {
           if (success) {
             const idx = this.pages.length;
             this.pages.push({ name: fullName, content });
-             // Re-sort and re-index
+            // Re-sort and re-index
             this.pages.sort((a, b) => {
-                const nA = a.name.endsWith("/index") ? a.name.replace(/\/index$/, "") : a.name;
-                const nB = b.name.endsWith("/index") ? b.name.replace(/\/index$/, "") : b.name;
-                return nA.toLowerCase().localeCompare(nB.toLowerCase());
+              const nA = a.name.endsWith("/index")
+                ? a.name.replace(/\/index$/, "")
+                : a.name;
+              const nB = b.name.endsWith("/index")
+                ? b.name.replace(/\/index$/, "")
+                : b.name;
+              return nA.toLowerCase().localeCompare(nB.toLowerCase());
             });
             for (let i in this.pages) {
-                pagesByName.set(this.pages[i].name, i);
+              pagesByName.set(this.pages[i].name, i);
             }
             this.openPageByName(fullName);
           } else {
             alert("Error happened");
           }
         }
-      );
-    },
-
-      );
-    },
-    async newPage() {
-      this.$refs.modals.askUser(
-        `Create a new note`,
-        `Type the name for the new note:`,
-        "Create",
-        { hasInput: true },
-        async (name) => {
-          if (!name) return;
-          const content = `# ${name}`;
-          let success = false;
-          try {
-            let req = await fetch("notebook", {
-              method: "POST",
-              headers: Object.assign(
-                { "Content-Type": "application/json" },
-                getTokenHeader(),
-              ),
-              body: JSON.stringify({ name, content }),
-            });
-            success = 200 == req.status;
-            name = (await req.json()).name;
-          } catch (err) {
-            console.error(err);
-          }
-          if (success) {
-            const idx = this.pages.length;
-            this.pages.push({ name, content });
-            pagesByName.set(name, idx);
-            this.openPage(idx);
-          } else {
-            alert("Error happened");
-          }
-        },
       );
     },
     openPage(idx) {
@@ -398,7 +368,7 @@ export default {
               window.find(pat);
             }, 1);
           }
-        },
+        }
       );
     },
     showHelp() {
