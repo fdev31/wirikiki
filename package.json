@@ -1,12 +1,12 @@
 {
   "dependencies": {
-    "@babel/preset-env": "^7.28.6",
+    "@babel/preset-env": "^7.29.0",
     "@rollup/plugin-commonjs": "^24.0.1",
     "@rollup/plugin-json": "^4.1.0",
     "@rollup/plugin-node-resolve": "^15.0.1",
     "@rollup/plugin-replace": "^3.1.0",
     "@rollup/plugin-strip": "^2.1.0",
-    "@vue/compiler-sfc": "^3.5.26",
+    "@vue/compiler-sfc": "^3.5.28",
     "black": "^0.3.0",
     "highlight.js": "^11.7.0",
     "markdown-it": "^12.3.2",

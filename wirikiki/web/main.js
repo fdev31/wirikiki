@@ -6289,6 +6289,34 @@ const vModelText = {
         }
     }
 };
+
+const systemModifiers = ['ctrl', 'shift', 'alt', 'meta'];
+const modifierGuards = {
+    stop: e => e.stopPropagation(),
+    prevent: e => e.preventDefault(),
+    self: e => e.target !== e.currentTarget,
+    ctrl: e => !e.ctrlKey,
+    shift: e => !e.shiftKey,
+    alt: e => !e.altKey,
+    meta: e => !e.metaKey,
+    left: e => 'button' in e && e.button !== 0,
+    middle: e => 'button' in e && e.button !== 1,
+    right: e => 'button' in e && e.button !== 2,
+    exact: (e, modifiers) => systemModifiers.some(m => e[`${m}Key`] && !modifiers.includes(m))
+};
+/**
+ * @private
+ */
+const withModifiers = (fn, modifiers) => {
+    return (event, ...args) => {
+        for (let i = 0; i < modifiers.length; i++) {
+            const guard = modifierGuards[modifiers[i]];
+            if (guard && guard(event, modifiers))
+                return;
+        }
+        return fn(event, ...args);
+    };
+};
 // Kept for 2.x compat.
 // Note: IE11 compat for `spacebar` and `del` is removed for now.
 const keyNames = {
@@ -6314,6 +6342,48 @@ const withKeys = (fn, modifiers) => {
         }
     };
 };
+
+const vShow = {
+    beforeMount(el, { value }, { transition }) {
+        el._vod = el.style.display === 'none' ? '' : el.style.display;
+        if (transition && value) {
+            transition.beforeEnter(el);
+        }
+        else {
+            setDisplay(el, value);
+        }
+    },
+    mounted(el, { value }, { transition }) {
+        if (transition && value) {
+            transition.enter(el);
+        }
+    },
+    updated(el, { value, oldValue }, { transition }) {
+        if (!value === !oldValue)
+            return;
+        if (transition) {
+            if (value) {
+                transition.beforeEnter(el);
+                setDisplay(el, true);
+                transition.enter(el);
+            }
+            else {
+                transition.leave(el, () => {
+                    setDisplay(el, false);
+                });
+            }
+        }
+        else {
+            setDisplay(el, value);
+        }
+    },
+    beforeUnmount(el, { value }) {
+        setDisplay(el, value);
+    }
+};
+function setDisplay(el, value) {
+    el.style.display = value ? el._vod : 'none';
+}
 
 const rendererOptions = /*#__PURE__*/ extend({ patchProp }, nodeOps);
 // lazy create the renderer - this makes core renderer logic tree-shakable
@@ -6402,9 +6472,15 @@ var script$3 = {
       themeSelectors.forEach((name) => gE(name).classList[action](darkClass));
     },
     setContent(pages) {
-      this.pages = Array.from(pages.values()).sort((a, b) =>
-        a.name.toLowerCase().localeCompare(b.name.toLowerCase())
-      );
+      this.pages = Array.from(pages.values()).sort((a, b) => {
+        const nA = a.name.endsWith("/index")
+          ? a.name.replace(/\/index$/, "")
+          : a.name;
+        const nB = b.name.endsWith("/index")
+          ? b.name.replace(/\/index$/, "")
+          : b.name;
+        return nA.toLowerCase().localeCompare(nB.toLowerCase());
+      });
       for (let i in this.pages) {
         pagesByName.set(this.pages[i].name, i);
       }
@@ -6413,6 +6489,78 @@ var script$3 = {
       } else {
         this.openPage(0);
       }
+    },
+    isFolder(name) {
+      return name.endsWith("/index");
+    },
+    getDisplayName(name) {
+      if (name.endsWith("/index")) {
+        const parts = name.split("/");
+        return parts.length > 1
+          ? parts[parts.length - 2]
+          : name.replace("/index", "");
+      }
+      return name.split("/").pop();
+    },
+    getIndent(name) {
+      let depth = (name.match(/\//g) || []).length;
+      if (name.endsWith("/index")) depth--;
+      return { paddingLeft: depth * 15 + 5 + "px" };
+    },
+    contextMenu(evt, pageName) {
+      // Prevent default browser context menu if we were implementing a custom one
+      // But the user asked for buttons.
+      // For now, let's keep it simple.
+      // But we need a way to pass the folder context to the "add" buttons.
+    },
+    getPageParent(name) {
+      if (name.endsWith("/index")) {
+        name = name.replace(/\/index$/, "");
+      }
+      // If it's a folder (e.g. "foo"), we want "foo" as parent for new items
+      return name;
+    },
+
+    toggleFolder(name) {
+      // name is something like "foo/index"
+      const folder = name.replace(/\/index$/, "");
+      if (this.collapsedFolders.has(folder)) {
+        this.collapsedFolders.delete(folder);
+      } else {
+        this.collapsedFolders.add(folder);
+      }
+      // Force update if needed, but Set reactivity usually requires creating new Set or using Vue.set concepts if Vue 2.
+      // Vue 3 supports Set reactivity? This project says Vue 3.
+      // But just to be safe, let's re-assign.
+      this.collapsedFolders = new Set(this.collapsedFolders);
+    },
+    isCollapsed(name) {
+      const folder = name.replace(/\/index$/, "");
+      return this.collapsedFolders.has(folder);
+    },
+    isPageVisible(name) {
+      let checkPath = name;
+      if (checkPath.endsWith("/index")) {
+        checkPath = checkPath.replace(/\/index$/, "");
+        const lastSlash = checkPath.lastIndexOf("/");
+        if (lastSlash === -1) return true;
+        checkPath = checkPath.substring(0, lastSlash);
+      } else {
+        const lastSlash = checkPath.lastIndexOf("/");
+        if (lastSlash === -1) return true;
+        checkPath = checkPath.substring(0, lastSlash);
+      }
+
+      // Check all ancestors
+      if (!checkPath) return true;
+
+      const parts = checkPath.split("/");
+      let current = "";
+      for (const p of parts) {
+        current += (current ? "/" : "") + p;
+        if (this.collapsedFolders.has(current)) return false;
+      }
+      return true;
     },
     openPageByName(name) {
       this.openPage(pagesByName.get(name));
@@ -6474,7 +6622,7 @@ var script$3 = {
       if (this.pageTitle == name) c.push("opened");
       return c.join(" ");
     },
-    async newFolder() {
+    async newFolder(parent = "") {
       this.$refs.modals.askUser(
         `Create a new folder`,
         `Type the name for the new folder:`,
@@ -6482,8 +6630,12 @@ var script$3 = {
         { hasInput: true },
         async (name) => {
           if (!name) return;
+          // Clean the name of illegal chars
+          name = name.replace(/[^a-zA-Z0-9 _-]/g, "");
+
+          let fullName = parent ? `${parent}/${name}` : name;
           let success = false;
-          const content = `# Index of ${name}`;
+          const content = `# Index of ${fullName}`;
           try {
             let req = await fetch("notebook", {
               method: "POST",
@@ -6491,25 +6643,53 @@ var script$3 = {
                 { "Content-Type": "application/json" },
                 getTokenHeader()
               ),
-              body: JSON.stringify({ name: `${name}/index`, content }),
+              body: JSON.stringify({ name: `${fullName}/index`, content }),
             });
             success = 200 == req.status;
-            name = (await req.json()).name;
+            // The backend returns the name it used, let's respect it
+            const res = await req.json();
+            if (res.name) {
+              // If backend returns "folder/index", we just want the folder part usually
+              // but let's see how our frontend handles it.
+              // Our frontend stores entries as they come.
+              // We constructed `${fullName}/index` above.
+              fullName = res.name.replace(/\/index$/, "");
+            }
           } catch (err) {
             console.error(err);
           }
           if (success) {
-            const idx = this.pages.length;
-            this.pages.push({ name, content });
-            pagesByName.set(name, idx);
-            this.openPage(idx);
+            this.pages.length;
+            // Add the index file for the new folder
+            const indexName = `${fullName}/index`;
+            this.pages.push({ name: indexName, content });
+
+            // Re-sort and re-index
+            this.pages.sort((a, b) => {
+              const nA = a.name.endsWith("/index")
+                ? a.name.replace(/\/index$/, "")
+                : a.name;
+              const nB = b.name.endsWith("/index")
+                ? b.name.replace(/\/index$/, "")
+                : b.name;
+              return nA.toLowerCase().localeCompare(nB.toLowerCase());
+            });
+
+            for (let i in this.pages) {
+              pagesByName.set(this.pages[i].name, i);
+            }
+
+            this.collapsedFolders.delete(fullName);
+            this.collapsedFolders = new Set(this.collapsedFolders); // trigger reactivity
+
+            this.openPageByName(indexName);
           } else {
             alert("Error happened");
           }
         }
       );
     },
-    async newPage() {
+    async newPage(parent = "") {
       this.$refs.modals.askUser(
         `Create a new note`,
         `Type the name for the new note:`,
@@ -6517,7 +6697,11 @@ var script$3 = {
         { hasInput: true },
         async (name) => {
           if (!name) return;
-          const content = `# ${name}`;
+          // Clean the name
+          name = name.replace(/[^a-zA-Z0-9 _-]/g, "");
+
+          let fullName = parent ? `${parent}/${name}` : name;
+          const content = `# ${fullName}`;
           let success = false;
           try {
             let req = await fetch("notebook", {
@@ -6526,18 +6710,31 @@ var script$3 = {
                 { "Content-Type": "application/json" },
                 getTokenHeader()
               ),
-              body: JSON.stringify({ name, content }),
+              body: JSON.stringify({ name: fullName, content }),
             });
             success = 200 == req.status;
-            name = (await req.json()).name;
+            const res = await req.json();
+            if (res.name) fullName = res.name;
           } catch (err) {
             console.error(err);
           }
           if (success) {
-            const idx = this.pages.length;
-            this.pages.push({ name, content });
-            pagesByName.set(name, idx);
-            this.openPage(idx);
+            this.pages.length;
+            this.pages.push({ name: fullName, content });
+            // Re-sort and re-index
+            this.pages.sort((a, b) => {
+              const nA = a.name.endsWith("/index")
+                ? a.name.replace(/\/index$/, "")
+                : a.name;
+              const nB = b.name.endsWith("/index")
+                ? b.name.replace(/\/index$/, "")
+                : b.name;
+              return nA.toLowerCase().localeCompare(nB.toLowerCase());
+            });
+            for (let i in this.pages) {
+              pagesByName.set(this.pages[i].name, i);
+            }
+            this.openPageByName(fullName);
           } else {
             alert("Error happened");
           }
@@ -6612,13 +6809,30 @@ var script$3 = {
       sidebarHidden: false,
       pageTitle: "Wiki",
       pageIndex: -1,
+      collapsedFolders: new Set(),
     };
   },
 };const _hoisted_1$3 = { id: "topbar" };
 const _hoisted_2$2 = { id: "barbuttons" };
 const _hoisted_3$2 = { id: "sidebar" };
 const _hoisted_4$2 = ["onClick"];
-const _hoisted_5$1 = { id: "main" };
+const _hoisted_5$1 = { class: "item-content" };
+const _hoisted_6$1 = {
+  key: 0,
+  class: "folder-icon"
+};
+const _hoisted_7$1 = {
+  key: 1,
+  class: "file-icon"
+};
+const _hoisted_8$1 = { class: "item-name" };
+const _hoisted_9$1 = {
+  key: 0,
+  class: "item-actions"
+};
+const _hoisted_10$1 = ["onClick"];
+const _hoisted_11$1 = ["onClick"];
+const _hoisted_12 = { id: "main" };
 
 function render$4(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_bar_button = resolveComponent("bar-button");
@@ -6672,26 +6886,52 @@ function render$4(_ctx, _cache, $props, $setup, $data, $options) {
     ]),
     createBaseVNode("div", _hoisted_3$2, [
       (openBlock(true), createElementBlock(Fragment, null, renderList($data.pages, (page) => {
-        return (openBlock(), createElementBlock("div", {
-          onClick: $event => ($options.openPageByName(page.name)),
-          class: normalizeClass($options.getTabClasses(page.name)),
-          key: page.name
-        }, toDisplayString(page.name.replace(new RegExp("[^/]*/"), "")), 11 /* TEXT, CLASS, PROPS */, _hoisted_4$2))
+        return withDirectives((openBlock(), createElementBlock("div", {
+          onClick: withModifiers($event => ($options.isFolder(page.name) ? $options.toggleFolder(page.name) : $options.openPageByName(page.name)), ["stop"]),
+          class: normalizeClass([$options.getTabClasses(page.name), "sidebar-item-container"]),
+          key: page.name,
+          style: normalizeStyle($options.getIndent(page.name))
+        }, [
+          createBaseVNode("div", _hoisted_5$1, [
+            ($options.isFolder(page.name))
+              ? (openBlock(), createElementBlock("span", _hoisted_6$1, toDisplayString($options.isCollapsed(page.name) ? '📁' : '📂'), 1 /* TEXT */))
+              : (page.name !== 'Home')
+                ? (openBlock(), createElementBlock("span", _hoisted_7$1, " 📄 "))
+                : createCommentVNode("v-if", true),
+            createBaseVNode("span", _hoisted_8$1, toDisplayString($options.getDisplayName(page.name)), 1 /* TEXT */)
+          ]),
+          ($options.isFolder(page.name) && !$options.isCollapsed(page.name))
+            ? (openBlock(), createElementBlock("div", _hoisted_9$1, [
+                createBaseVNode("span", {
+                  onClick: withModifiers($event => ($options.newPage($options.getPageParent(page.name))), ["stop"]),
+                  title: "New Page in this folder",
+                  class: "action-btn"
+                }, "📄+", 8 /* PROPS */, _hoisted_10$1),
+                createBaseVNode("span", {
+                  onClick: withModifiers($event => ($options.newFolder($options.getPageParent(page.name))), ["stop"]),
+                  title: "New Folder in this folder",
+                  class: "action-btn"
+                }, "📁+", 8 /* PROPS */, _hoisted_11$1)
+              ]))
+            : createCommentVNode("v-if", true)
+        ], 14 /* CLASS, STYLE, PROPS */, _hoisted_4$2)), [
+          [vShow, $options.isPageVisible(page.name)]
+        ])
       }), 128 /* KEYED_FRAGMENT */)),
       createBaseVNode("div", {
         onClick: _cache[7] || (_cache[7] = $event => ($options.newPage())),
         class: "pageTab"
-      }, _cache[9] || (_cache[9] = [
-        createBaseVNode("b", null, "+ Add new", -1 /* HOISTED */)
-      ])),
+      }, [...(_cache[9] || (_cache[9] = [
+        createBaseVNode("b", null, "+ Add new root note", -1 /* CACHED */)
+      ]))]),
       createBaseVNode("div", {
         onClick: _cache[8] || (_cache[8] = $event => ($options.newFolder())),
         class: "pageTab"
-      }, _cache[10] || (_cache[10] = [
-        createBaseVNode("b", null, "+ Add folder", -1 /* HOISTED */)
-      ]))
+      }, [...(_cache[10] || (_cache[10] = [
+        createBaseVNode("b", null, "+ Add root folder", -1 /* CACHED */)
+      ]))])
     ]),
-    createBaseVNode("div", _hoisted_5$1, [
+    createBaseVNode("div", _hoisted_12, [
       createVNode(_component_markdown_editor, {
         ref: "editor",
         onDocChanged: $options.savePage
@@ -6778,7 +7018,7 @@ var script$1 = {
       if (this.hasPassword) {
         this._confirmation(this.userInput);
       } else {
-          this._confirmation(this.hasInput ? this.userInput : undefined);
+        this._confirmation(this.hasInput ? this.userInput : undefined);
       }
     },
     hide() {
@@ -6792,8 +7032,9 @@ var script$1 = {
       this.actionName = actionName;
       let opts = options || {};
       this.hasInput = opts.hasInput;
-      if (! this.hasInput) {
-          this.hasPassword = opts.hasPassword;
+      this.hasPassword = false;
+      if (!this.hasInput) {
+        this.hasPassword = opts.hasPassword;
       }
       this.userInput = "";
       l.show("modal-action", getOptions(this));
@@ -6902,18 +7143,18 @@ function render$2(_ctx, _cache, $props, $setup, $data, $options) {
           ])
         ])
       ])
-    ], -1 /* HOISTED */)),
+    ], -1 /* CACHED */)),
     createCommentVNode(" HELP "),
     createBaseVNode("div", _hoisted_1$1, [
       createBaseVNode("div", _hoisted_2, [
         createBaseVNode("div", _hoisted_3, [
-          _cache[7] || (_cache[7] = createStaticVNode("<header class=\"modal__header\"><h2 class=\"modal__title\" id=\"modal-1-title\">Help</h2><button class=\"modal__close\" aria-label=\"Close modal\" data-micromodal-close></button></header><main class=\"modal__content\" id=\"modal-1-content\"><h3>Shortcuts</h3><table><tr><th>Key</th><th>Description</th></tr><tr><td><b>e</b></td><td>Edit</td></tr><tr><td><b>n</b></td><td>New page</td></tr><tr><td><b>f</b></td><td>Find / Search</td></tr><tr><td><b>escape</b></td><td>Save (return to view mode)</td></tr><tr><td><b>delete</b></td><td>Delete this note</td></tr><tr><td><b>backspace</b></td><td>Toggle the side bar display</td></tr><tr><td><b>left/right</b></td><td>Navigate</td></tr></table></main>", 2)),
+          _cache[7] || (_cache[7] = createStaticVNode("<header class=\"modal__header\"><h2 class=\"modal__title\" id=\"modal-1-title\">Help</h2><button class=\"modal__close\" aria-label=\"Close modal\" data-micromodal-close></button></header><main class=\"modal__content\" id=\"modal-1-content\"><h3>Shortcuts</h3><table><tbody><tr><th>Key</th><th>Description</th></tr><tr><td><b>e</b></td><td>Edit</td></tr><tr><td><b>n</b></td><td>New page</td></tr><tr><td><b>f</b></td><td>Find / Search</td></tr><tr><td><b>escape</b></td><td>Save (return to view mode)</td></tr><tr><td><b>delete</b></td><td>Delete this note</td></tr><tr><td><b>backspace</b></td><td>Toggle the side bar display</td></tr><tr><td><b>left/right</b></td><td>Navigate</td></tr></tbody></table></main>", 2)),
           createBaseVNode("footer", _hoisted_4, [
             _cache[6] || (_cache[6] = createBaseVNode("button", {
               class: "modal__btn",
               "data-micromodal-close": "",
               "aria-label": "Close this dialog window"
-            }, " Close ", -1 /* HOISTED */)),
+            }, " Close ", -1 /* CACHED */)),
             createBaseVNode("button", {
               class: "modal__btn",
               "data-micromodal-close": "",
@@ -6969,7 +7210,7 @@ function render$2(_ctx, _cache, $props, $setup, $data, $options) {
               class: "modal__btn",
               "data-micromodal-close": "",
               "aria-label": "Close this dialog window"
-            }, " Cancel ", -1 /* HOISTED */))
+            }, " Cancel ", -1 /* CACHED */))
           ])
         ])
       ])
